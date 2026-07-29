@@ -9,7 +9,7 @@ module Tradedoc
 
           def self.dump(w, obj)
             w.add("ram:SpecifiedTradeSettlementPaymentMeans") do
-              w.add("ram:TypeCode", obj.type_code.code, listAgencyID: CII::AGENCY_ID)
+              w.add("ram:TypeCode", obj.type_code.code, listAgencyID: Code::Agency::CEFACT)
               w.render(obj.sending_account, as: "PayerPartyDebtorFinancialAccount")
               w.render(obj.receiving_account, as: "PayeePartyCreditorFinancialAccount")
             end

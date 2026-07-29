@@ -2,8 +2,6 @@
 module Tradedoc
   module Format
     module CII
-      # https://unece.org/fileadmin/DAM/trade/edifact/code/3055cl.htm
-      AGENCY_ID = "6"
     end
   end
 end

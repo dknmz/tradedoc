@@ -5,5 +5,6 @@ module Tradedoc
   end
 end
 
+require_relative "code/agency"
 require_relative "code/document_type"
 require_relative "code/payment_means_type"

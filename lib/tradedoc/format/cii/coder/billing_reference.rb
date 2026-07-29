@@ -10,7 +10,7 @@ module Tradedoc
           def self.dump(w, obj, as: "ram:AssociatedReferencedDocument")
             w.add(as) do
               w.add("ram:IssuerAssignedID", obj.document_reference.id)
-              w.add("ram:TypeCode", obj.type.cefact_id, listAgencyID: CII::AGENCY_ID)
+              w.add("ram:TypeCode", obj.type.cefact_id, listAgencyID: Code::Agency::CEFACT)
               w.render(obj.document_reference.uuid, as: "ram:GlobalID")
               w.render(obj.document_reference.issued_at, as: "ram:FormattedIssueDateTime", qualified: true)
               w.render(obj.document_reference.note, as: "ram:IncludedNote")
