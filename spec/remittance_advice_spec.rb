@@ -66,7 +66,7 @@ RSpec.describe("Remittance Advice") do
     end
 
     it "passes XSD validation" do
-      validate_schema(built, "spec/format/cii/xsd/remittance_advice/CrossIndustryRemittanceAdvice_100pD23B.xsd")
+      validate_schema(built, "spec/format/cii/xsd/remittance_advice/CrossIndustryRemittanceAdvice_100pD25A.xsd")
     end
 
     it "can be parsed back into a model" do
@@ -89,6 +89,11 @@ RSpec.describe("Remittance Advice") do
     it "can be parsed back into a model" do
       parsed = Tradedoc::Format::UBL::Document.parse(built)
       expect(parsed).to(eq(model))
+    end
+
+    it "can parse sample files" do
+      xml = File.read("spec/format/ubl/samples/UBL-RemittanceAdvice-2.0-Example.xml")
+      expect(Tradedoc::Format::UBL::Document.parse(xml)).to(be_a(Tradedoc::Model::RemittanceAdvice))
     end
   end
 end
