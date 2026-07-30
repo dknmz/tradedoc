@@ -24,7 +24,7 @@ module Tradedoc
             w.add("rad:RemittanceAdvice", NS) do
               w.add("cbc:ID", obj.id)
               w.render(obj.uuid, as: "cbc:UUID")
-              w.render(obj.issued_at&.to_date, as: "IssueDate")
+              w.render(obj.issue_date, as: "IssueDate")
               w.render(obj.note, as: "cbc:Note")
 
               w.render(obj.total_payment_amount, as: "TotalPaymentAmount")
@@ -57,7 +57,7 @@ module Tradedoc
             r.with_node("rad:RemittanceAdvice") do
               r.parse("cbc:ID", :String) { obj.id = it }
               r.parse("cbc:UUID", :String) { obj.uuid = it }
-              r.parse("cbc:IssueDate", :Date) { obj.issued_at = it.to_time }
+              r.parse("cbc:IssueDate", :Date) { obj.issue_date = it }
               r.parse("cbc:Note", :String) { obj.note = it }
               r.parse("cbc:TotalPaymentAmount", :Money) { obj.total_payment_amount = it }
               r.parse("cac:AccountingCustomerParty", :TradeParty) { obj.buyer = it }

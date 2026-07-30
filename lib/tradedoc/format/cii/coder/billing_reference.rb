@@ -12,7 +12,7 @@ module Tradedoc
               w.add("ram:IssuerAssignedID", obj.document_reference.id)
               w.add("ram:TypeCode", obj.type.cefact_id, listAgencyID: Code::Agency::CEFACT)
               w.render(obj.document_reference.uuid, as: "ram:GlobalID")
-              w.render(obj.document_reference.issued_at, as: "ram:FormattedIssueDateTime", qualified: true)
+              w.render(obj.document_reference.issue_date, :Date, as: "ram:FormattedIssueDateTime", qualified: true)
               w.render(obj.document_reference.note, as: "ram:IncludedNote")
             end
           end
@@ -23,7 +23,7 @@ module Tradedoc
                 r.parse("ram:IssuerAssignedID", :String) { dr.id = it }
                 r.parse("ram:GlobalID", :String) { dr.uuid = it }
                 r.parse("ram:IncludedNote", :String) { dr.note = it }
-                r.parse("ram:FormattedIssueDateTime", :Time) { dr.issued_at = it }
+                r.parse("ram:FormattedIssueDateTime", :Date) { dr.issue_date = it }
               end
 
               r.with_node("ram:TypeCode") { br.type = Code::DocumentType.get(r.text) }

@@ -27,11 +27,10 @@ module Tradedoc
       # Otherwise, a coder is looked-up and used for the given type.
       # Assumes that the de-namespaced class name has a matching local coder.
       #   e.g. `Tradedoc::Model::Country` rendered by `Tradedoc::Format::UBL::Coder::Country`
-      def render(obj, coder_class = nil, **opts)
+      def render(obj, coder_ref = nil, **opts)
         return if obj.nil?
 
-        # If there's a coder class matching the name of the element, that's probably it
-        coder_class ||= coder_for(obj)
+        coder_class = coder_for(coder_ref, obj)
         if coder_class.nil?
           raise NoCoderError, "couldn't find a coder for '#{obj.class.name}'"
         end
@@ -43,9 +42,23 @@ module Tradedoc
 
       attr_reader :xml, :coder_namespaces
 
-      def coder_for(obj)
-        type_name = obj.class.name.split("::").last.to_sym
+      def coder_for(coder_ref, obj)
+        case coder_ref
+        in Class => coder if coder.respond_to?(:dump)
+          coder
+        in Symbol => type_name
+          coder_by_name(type_name)
+        in nil
+          coder_for_object(obj)
+        end
+      end
 
+      def coder_for_object(obj)
+        type_name = obj.class.name.split("::").last.to_sym
+        coder_by_name(type_name)
+      end
+
+      def coder_by_name(type_name)
         coder_namespaces
           .lazy
           .filter_map { |ns| ns.const_defined?(type_name) && ns.const_get(type_name) }

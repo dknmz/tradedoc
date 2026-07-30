@@ -29,7 +29,7 @@ module Tradedoc
               w.add("cac:#{element_name_root}#{DREF_SUFFIX}") do
                 w.add("cbc:ID", ref.id)
                 w.add("cbc:UUID", ref.uuid)
-                w.render(ref.issued_at&.to_date, as: "IssueDate")
+                w.render(ref.issue_date, as: "IssueDate")
               end
             end
           end
@@ -46,7 +46,7 @@ module Tradedoc
                 br.document_reference = Model::DocumentReference.new.tap do |dr|
                   r.parse("cbc:ID", :String) { dr.id = it }
                   r.parse("cbc:UUID", :String) { dr.uuid = it }
-                  r.parse("cbc:IssueDate", :Date) { dr.issued_at = it.to_time }
+                  r.parse("cbc:IssueDate", :Date) { dr.issue_date = it }
                 end
               end
             end

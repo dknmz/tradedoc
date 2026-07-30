@@ -3,7 +3,6 @@
 require "bigdecimal"
 require "nokogiri"
 require "money"
-require "time"
 
 module Tradedoc
   Error = Class.new(StandardError)

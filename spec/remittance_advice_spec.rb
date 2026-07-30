@@ -14,11 +14,11 @@ RSpec.describe("Remittance Advice") do
   let(:model) do
     Tradedoc::Model::RemittanceAdvice.new(
       id: "RA-12345",
-      issued_at: Time.new(2026, 7, 24, 0, 0, 0),
+      issue_date: Date.new(2026, 7, 24),
       note: "Payment for invoice",
       invoice_period: {
-        starts_at: Time.new(2026, 7, 13, 0, 0, 0),
-        ends_at: Time.new(2026, 7, 13, 0, 0, 0)
+        start_date: Date.new(2026, 7, 13),
+        end_date: Date.new(2026, 7, 13)
       },
       buyer: {
         name: "ACME Purchasing Corp.",
@@ -48,7 +48,7 @@ RSpec.describe("Remittance Advice") do
             document_reference: {
               id: "INV-1234",
               uuid: "aae060e8-9b73-49f5-9c9e-322f9567c778",
-              issued_at: Time.new(2026, 7, 13, 0, 0, 0)
+              issue_date: Date.new(2026, 7, 13)
             }
           }
         }

@@ -11,7 +11,7 @@ module Tradedoc
     #
     #   class Document < Base
     #     has :id, String
-    #     has :issued_at, Time
+    #     has :issue_date, Date
     #     has_many :lines, Line
     #   end
     class Base

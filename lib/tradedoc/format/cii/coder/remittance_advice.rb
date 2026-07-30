@@ -27,7 +27,7 @@ module Tradedoc
             w.add("rsm:CrossIndustryRemittanceAdvice", NS) do
               w.add("ExchangedDocument") do
                 w.add("ram:ID", obj.id)
-                w.render(obj.issued_at, as: "ram:IssueDateTime")
+                w.render(obj.issue_date, as: "ram:IssueDateTime")
 
                 if (note = obj.note)
                   w.add("ram:IncludedNote") do
@@ -77,7 +77,7 @@ module Tradedoc
                   r.with_node("ram:IncludedNote") do
                     r.parse("ram:Content", :String) { ra.note = it }
                   end
-                  r.parse("ram:IssueDateTime", :Time) { ra.issued_at = it }
+                  r.parse("ram:IssueDateTime", :Date) { ra.issue_date = it }
                   r.parse("ram:EffectiveSpecifiedPeriod", :Period) { ra.invoice_period = it }
                 end
 

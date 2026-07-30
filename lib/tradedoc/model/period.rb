@@ -1,8 +1,8 @@
 module Tradedoc
   module Model
     class Period < Base
-      has :starts_at, Time
-      has :ends_at, Time
+      has :start_date, Date
+      has :end_date, Date
     end
   end
 end

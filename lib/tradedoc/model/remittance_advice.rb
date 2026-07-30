@@ -3,7 +3,7 @@ module Tradedoc
     class RemittanceAdvice < Base
       has :id, String
       has :uuid, String
-      has :issued_at, Time
+      has :issue_date, Date
       has :note, String
       has :buyer, TradeParty
       has :supplier, TradeParty

@@ -85,7 +85,7 @@ module Tradedoc
       # the given node is present
       #
       # @example
-      #   r.parse("udt:IssuedAt", Time) { doc.issued_at = it }
+      #   r.parse("udt:IssueDate", :Date) { doc.issue_date = it }
       #
       # @param xpath [String]
       # @param coder_ref [Class | Symbol]

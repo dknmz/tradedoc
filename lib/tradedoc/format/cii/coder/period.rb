@@ -9,15 +9,15 @@ module Tradedoc
 
           def self.dump(w, obj, as:)
             w.add(as) do
-              w.render(obj.starts_at, as: "ram:StartDateTime")
-              w.render(obj.ends_at, as: "ram:EndDateTime")
+              w.render(obj.start_date, as: "ram:StartDateTime")
+              w.render(obj.end_date, as: "ram:EndDateTime")
             end
           end
 
           def self.parse(r)
             ruby_type.new.tap do |obj|
-              r.parse("ram:StartDateTime", :Time) { obj.starts_at = it }
-              r.parse("ram:EndDateTime", :Time) { obj.ends_at = it }
+              r.parse("ram:StartDateTime", :Date) { obj.start_date = it }
+              r.parse("ram:EndDateTime", :Date) { obj.end_date = it }
             end
           end
         end
