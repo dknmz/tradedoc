@@ -59,10 +59,15 @@ RSpec.describe("Remittance Advice") do
   end
 
   describe "CII" do
-    subject(:built) { Tradedoc::Format::CII::Document.dump(model) }
+    let(:doc_format) { Tradedoc::Format::CII }
+    subject(:built) { doc_format.dump(model) }
 
     it "can serialize to XML" do
       expect(built).to(be_a(Nokogiri::XML::Document))
+    end
+
+    it "can serialize to XML via #dump" do
+      expect(model.dump(doc_format)).to(be_a(Nokogiri::XML::Document))
     end
 
     it "passes XSD validation" do
@@ -70,16 +75,21 @@ RSpec.describe("Remittance Advice") do
     end
 
     it "can be parsed back into a model" do
-      parsed = Tradedoc::Format::CII::Document.parse(built)
+      parsed = Tradedoc::Format::CII.parse(built)
       expect(parsed).to(eq(model))
     end
   end
 
   describe "UBL" do
-    subject(:built) { Tradedoc::Format::UBL::Document.dump(model) }
+    let(:doc_format) { Tradedoc::Format::UBL }
+    subject(:built) { doc_format.dump(model) }
 
     it "can serialize to XML" do
       expect(built).to(be_a(Nokogiri::XML::Document))
+    end
+
+    it "can serialize to XML via #dump" do
+      expect(model.dump(doc_format)).to(be_a(Nokogiri::XML::Document))
     end
 
     it "passes XSD validation" do
@@ -87,13 +97,13 @@ RSpec.describe("Remittance Advice") do
     end
 
     it "can be parsed back into a model" do
-      parsed = Tradedoc::Format::UBL::Document.parse(built)
+      parsed = doc_format.parse(built)
       expect(parsed).to(eq(model))
     end
 
     it "can parse sample files" do
       xml = File.read("spec/format/ubl/samples/UBL-RemittanceAdvice-2.0-Example.xml")
-      expect(Tradedoc::Format::UBL::Document.parse(xml)).to(be_a(Tradedoc::Model::RemittanceAdvice))
+      expect(doc_format.parse(xml)).to(be_a(Tradedoc::Model::RemittanceAdvice))
     end
   end
 end

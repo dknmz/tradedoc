@@ -17,7 +17,7 @@ module Tradedoc
 
           def self.parse(r)
             ruby_type.new.tap do |pm|
-              r.parse("ram:TypeCode", String) { pm.type_code = it }
+              r.parse("ram:TypeCode", :String) { pm.type_code = it }
               r.parse("ram:PayerPartyDebtorFinancialAccount", :FinancialAccount) { pm.sending_account = it }
               r.parse("ram:PayeePartyCreditorFinancialAccount", :FinancialAccount) { pm.receiving_account = it }
             end

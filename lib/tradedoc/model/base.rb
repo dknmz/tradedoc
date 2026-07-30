@@ -17,11 +17,22 @@ module Tradedoc
     class Base
       Element = Data.define(:name, :type, :many)
 
+      module Serialization
+        def dump(to_format)
+          fmt = Tradedoc.format_from(to_format)
+          fmt.dump(self)
+        end
+      end
+
       def initialize(**attrs)
         attrs.each { |key, value| public_send(:"#{key}=", value) }
       end
 
       class << self
+        def is_document
+          include(Serialization)
+        end
+
         def has(name, type)
           def_element(name, type, false)
 

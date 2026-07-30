@@ -1,6 +1,8 @@
 module Tradedoc
   module Model
     class RemittanceAdvice < Base
+      is_document
+
       has :id, String
       has :uuid, String
       has :issue_date, Date

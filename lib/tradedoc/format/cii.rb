@@ -2,9 +2,11 @@
 module Tradedoc
   module Format
     module CII
+      extend Accessors
+      extend Finders
+      extend XMLSerialization
     end
   end
 end
 
 require_relative "cii/coder"
-require_relative "cii/document"

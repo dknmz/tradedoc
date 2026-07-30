@@ -101,7 +101,7 @@ module Tradedoc
                 r.with_nodes("rsm:SupplyChainTradeTransaction") do
                   line = Model::RemittanceAdviceLine.new
 
-                  r.parse("ram:AssociatedReferencedDocument", BillingReference) { line.billing_reference = it }
+                  r.parse("ram:AssociatedReferencedDocument", :BillingReference) { line.billing_reference = it }
                   r.with_node("ram:AssociatedDocumentLineDocument") do
                     r.parse("ram:LineID", :String) { line.id = it }
                   end

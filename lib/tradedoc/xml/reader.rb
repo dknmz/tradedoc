@@ -4,9 +4,10 @@ module Tradedoc
     # experience where you can traverse a document by selecting nodes without
     # having to constantly do `nil` checks and assign ephemeral variables.
     class Reader
-      attr_reader :node, :namespaces, :coder_namespaces
+      attr_reader :node, :namespaces, :format
 
       # @param node [Nokogiri::XML::Node]
+      #   XML::Document is also considered a node
       # @param namespaces [Hash]
       #   Namespaces *with aliases* to use when reading the document.
       #  	You must not rely on namespace aliases defined in the source document
@@ -14,12 +15,13 @@ module Tradedoc
       #   Define a list of all namespaces you'll read from with aliases.
       #
       #   { "xmlns:foo" => "urn:example:Foo", "xmlns:bar" => "urn:example:Bar" }
-      # @param coder_namespaces [Array<Module>]
-      #   List of Ruby namespaces containing coders.
-      def initialize(node, namespaces = {}, coder_namespaces: [])
+      # @param format [Module]
+      #   The format to use for parsing.
+      #   Must repond to `.coder_for(type)` to get a coder for a destination type.
+      def initialize(node, namespaces = {}, format:)
         @node = node
         @namespaces = namespaces
-        @coder_namespaces = coder_namespaces
+        @format = format
       end
 
       # If a node exists at the given xpath, yield a reader for that node.
@@ -92,7 +94,7 @@ module Tradedoc
       #   Any class that responds to `.parse(r)` where r is this `Reader`
       # @return [Object | nil]
       def parse(xpath, coder_ref)
-        coder_class = coder_for!(coder_ref)
+        coder_class = self.format.coder_for(coder_ref)
         value = with_node(xpath) { coder_class.parse(self) }
 
         # Allows parse callers to do something with the parsed value e.g.
@@ -124,26 +126,6 @@ module Tradedoc
 
       def attribute!(name)
         node.attributes.fetch(name).text
-      end
-
-      private
-
-      def coder_for!(coder_ref)
-        coder_class = case coder_ref
-        in Class => c
-          c
-        in Symbol => class_name
-          coder_namespaces
-            .lazy
-            .filter_map { |ns| ns.const_defined?(class_name) && ns.const_get(class_name) }
-            .first
-        end
-
-        if coder_class.nil?
-          raise NoCoderError, "couldn't find a coder using '#{coder_ref}'. checked in #{coder_namespaces}"
-        end
-
-        coder_class
       end
     end
   end

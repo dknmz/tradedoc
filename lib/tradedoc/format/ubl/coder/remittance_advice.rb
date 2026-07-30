@@ -20,6 +20,10 @@ module Tradedoc
             xmldoc.root.namespace.href == namespaces.fetch("xmlns:rad")
           end
 
+          def self.ruby_type
+            Model::RemittanceAdvice
+          end
+
           def self.dump(w, obj)
             w.add("rad:RemittanceAdvice", NS) do
               w.add("cbc:ID", obj.id)
@@ -52,7 +56,7 @@ module Tradedoc
           end
 
           def self.parse(r)
-            obj = Model::RemittanceAdvice.new
+            obj = ruby_type.new
 
             r.with_node("rad:RemittanceAdvice") do
               r.parse("cbc:ID", :String) { obj.id = it }

@@ -4,14 +4,12 @@ module Tradedoc
     # build actions, namely rendering "components" easily.
     class Writer
       # @param xml [Nokogiri::XML::Builder]
-      # @param coder_namespaces [Array<Module>]
-      #   List of Ruby namespaces where coder objects can be found.
-      #   There should be one coder class for each model.
-      #   For example, to encode a `Model::TradeParty`, you'd want `Format::Foo::Coder::TradeParty`
-      #   and set the `coder_namespaces` to `[Format::Foo::Coder]`
-      def initialize(xml, coder_namespaces:)
+      # @param format [Module]
+      #   Any module responding to `.coder_for` and returning a coder.
+      #   In reality, should be one of the `Tradedoc.coders`
+      def initialize(xml, format:)
         @xml = xml
-        @coder_namespaces = coder_namespaces
+        @format = format
       end
 
       # Directly adds an element to the document without any processing.
@@ -30,40 +28,13 @@ module Tradedoc
       def render(obj, coder_ref = nil, **opts)
         return if obj.nil?
 
-        coder_class = coder_for(coder_ref, obj)
-        if coder_class.nil?
-          raise NoCoderError, "couldn't find a coder for '#{obj.class.name}'"
-        end
-
+        coder_class = self.format.coder_for(coder_ref || obj.class)
         coder_class.dump(self, obj, **opts)
       end
 
       private
 
-      attr_reader :xml, :coder_namespaces
-
-      def coder_for(coder_ref, obj)
-        case coder_ref
-        in Class => coder if coder.respond_to?(:dump)
-          coder
-        in Symbol => type_name
-          coder_by_name(type_name)
-        in nil
-          coder_for_object(obj)
-        end
-      end
-
-      def coder_for_object(obj)
-        type_name = obj.class.name.split("::").last.to_sym
-        coder_by_name(type_name)
-      end
-
-      def coder_by_name(type_name)
-        coder_namespaces
-          .lazy
-          .filter_map { |ns| ns.const_defined?(type_name) && ns.const_get(type_name) }
-          .first
-      end
+      attr_reader :xml, :format
     end
   end
 end
