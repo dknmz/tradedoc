@@ -66,7 +66,7 @@ RSpec.describe("Remittance Advice") do
     end
 
     it "passes XSD validation" do
-      validate_schema(built, "spec/xsd/cii/remittance_advice/CrossIndustryRemittanceAdvice_100pD23B.xsd")
+      validate_schema(built, "spec/format/cii/xsd/remittance_advice/CrossIndustryRemittanceAdvice_100pD23B.xsd")
     end
 
     it "can be parsed back into a model" do
@@ -83,7 +83,7 @@ RSpec.describe("Remittance Advice") do
     end
 
     it "passes XSD validation" do
-      validate_schema(built, "spec/xsd/ubl/maindoc/UBL-RemittanceAdvice-2.4.xsd")
+      validate_schema(built, "spec/format/ubl/xsd/maindoc/UBL-RemittanceAdvice-2.4.xsd")
     end
 
     it "can be parsed back into a model" do
