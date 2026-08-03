@@ -36,6 +36,10 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/dknmz/
 
 ## Resources
 
+### EN 16931
+
+* List of business terms: https://peppolvalidator.com/en16931-business-terms
+
 ### UBL
 
 * XSD and sample XML files: https://docs.oasis-open.org/ubl/os-UBL-2.4/
