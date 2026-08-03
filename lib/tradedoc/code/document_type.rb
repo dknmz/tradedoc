@@ -54,6 +54,31 @@ module Tradedoc
         {id:, cefact_id:, label:}
       end
 
+      def deconstruct_keys(keys)
+        to_h
+      end
+
+      def hash
+        to_h.hash
+      end
+
+      def ==(other)
+        case other
+        in DocumentType => t
+          t.hash == hash
+        in String | Symbol => pattern
+          self == self.class.get(pattern)
+        in Hash => h
+          to_h == h
+        in _
+          false
+        end
+      end
+
+      def eql?(other)
+        self == other
+      end
+
       # https://vocabulary.uncefact.org/DocumentCodeList
       register "326", :partial_invoice
       register "380", :commercial_invoice

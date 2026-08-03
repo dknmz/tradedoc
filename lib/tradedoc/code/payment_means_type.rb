@@ -47,6 +47,35 @@ module Tradedoc
         @label = label || id.to_s.tr("_", " ").capitalize
       end
 
+      def to_h
+        {id:, code:, label:}
+      end
+
+      def deconstruct_keys(keys)
+        to_h
+      end
+
+      def hash
+        to_h.hash
+      end
+
+      def ==(other)
+        case other
+        in PaymentMeansType => t
+          t.hash == hash
+        in String | Symbol => pattern
+          self == self.class.get(pattern)
+        in Hash => h
+          to_h == h
+        in _
+          false
+        end
+      end
+
+      def eql?(other)
+        self == other
+      end
+
       register "1", :instrument_not_defined
       register "2", :ach_credit, label: "ACH credit"
       register "3", :ach_debit, label: "ACH debit"
