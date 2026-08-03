@@ -59,8 +59,9 @@ module Tradedoc
     case source
     in Module => m if formats.include?(m)
       m
-    in String => str
-      formats.select { it.label.casecmp?(str) || it.name.split("::").last.casecmp?(str) }
+    in String | Symbol => name
+      name = name.to_s
+      formats.detect { it.label.casecmp?(name) || it.name.split("::").last.casecmp?(name) }
     end
   end
 

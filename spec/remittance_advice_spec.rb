@@ -68,6 +68,8 @@ RSpec.describe("Remittance Advice") do
 
     it "can serialize to XML via #dump" do
       expect(model.dump(doc_format)).to(be_a(Nokogiri::XML::Document))
+      expect(model.dump(:cii)).to(be_a(Nokogiri::XML::Document))
+      expect(model.dump("CII")).to(be_a(Nokogiri::XML::Document))
     end
 
     it "passes XSD validation" do
@@ -90,6 +92,8 @@ RSpec.describe("Remittance Advice") do
 
     it "can serialize to XML via #dump" do
       expect(model.dump(doc_format)).to(be_a(Nokogiri::XML::Document))
+      expect(model.dump(:ubl)).to(be_a(Nokogiri::XML::Document))
+      expect(model.dump("UBL")).to(be_a(Nokogiri::XML::Document))
     end
 
     it "passes XSD validation" do
