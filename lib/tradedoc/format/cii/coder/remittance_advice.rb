@@ -53,17 +53,19 @@ module Tradedoc
 
               obj.lines.each do |line|
                 w.add("rsm:SupplyChainTradeTransaction") do
-                  w.render(line.billing_reference)
-
                   w.add("ram:AssociatedDocumentLineDocument") do
                     w.add("ram:LineID", line.id)
                   end
 
                   w.add("ram:ApplicableHeaderTradeSettlement") do
                     w.render(line.exchange_rate, as: "ram:PaymentApplicableTradeCurrencyExchange")
+
+                    # The final amount *in the payout currency* for this line.
                     w.add("ram:SpecifiedTradeSettlementHeaderMonetarySummation") do
                       w.render(line.balance_amount, as: "PaymentTotalAmount")
                     end
+
+                    w.render(line.document_reference, as: "ram:InvoiceReferencedDocument")
                   end
                 end
               end
@@ -102,7 +104,6 @@ module Tradedoc
                 r.with_nodes("rsm:SupplyChainTradeTransaction") do
                   line = Model::RemittanceAdviceLine.new
 
-                  r.parse("ram:AssociatedReferencedDocument", :BillingReference) { line.billing_reference = it }
                   r.with_node("ram:AssociatedDocumentLineDocument") do
                     r.parse("ram:LineID", :String) { line.id = it }
                   end
@@ -114,6 +115,7 @@ module Tradedoc
                       r.parse("ram:TotalDiscountBasis", :Money) { line.credit_amount = it }
                       r.parse("ram:PaymentTotalAmount", :Money) { line.balance_amount = it }
                     end
+                    r.parse("ram:InvoiceReferencedDocument", :DocumentReference) { line.document_reference = it }
                   end
 
                   ra.lines.push(line)

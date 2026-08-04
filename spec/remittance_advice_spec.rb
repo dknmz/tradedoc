@@ -41,13 +41,11 @@ RSpec.describe("Remittance Advice") do
           id: "1",
           # debit_amount: Money.new(123456, "EUR"),
           balance_amount: Money.new(123456, "EUR"),
-          billing_reference: {
+          document_reference: {
+            id: "INV-1234",
+            uuid: "aae060e8-9b73-49f5-9c9e-322f9567c778",
             type: :commercial_invoice,
-            document_reference: {
-              id: "INV-1234",
-              uuid: "aae060e8-9b73-49f5-9c9e-322f9567c778",
-              issue_date: Date.new(2026, 7, 13)
-            }
+            issue_date: Date.new(2026, 7, 13)
           },
           exchange_rate: {
             source_currency_code: "EUR",

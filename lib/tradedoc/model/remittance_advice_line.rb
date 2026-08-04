@@ -5,6 +5,8 @@ module Tradedoc
       has :uuid, String
       has :note, String
 
+      has :document_reference, DocumentReference
+
       # Original amount due.
       # Not supported by CII
       has :debit_amount, Money
@@ -15,8 +17,6 @@ module Tradedoc
 
       # Actual amount being paid.
       has :balance_amount, Money
-
-      has :billing_reference, BillingReference
 
       has :exchange_rate, ExchangeRate
     end

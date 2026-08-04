@@ -49,7 +49,7 @@ module Tradedoc
                   w.add("cbc:ID", line.id)
                   w.render(line.note, as: "cbc:Note")
                   w.render(line.balance_amount, as: "BalanceAmount")
-                  w.render(line.billing_reference, as: "cac:BillingReference")
+                  w.render(line.document_reference, as: "cac:BillingReference")
                   w.render(line.exchange_rate, as: "cac:ExchangeRate")
                 end
               end
@@ -74,10 +74,8 @@ module Tradedoc
                 line = Model::RemittanceAdviceLine.new
                 r.parse("cbc:ID", :String) { line.id = it }
                 r.parse("cbc:Note", :String) { line.note = it }
-                r.parse("cbc:DebitLineAmount", :Money) { line.debit_amount = it }
-                r.parse("cbc:CreditLineAmount", :Money) { line.credit_amount = it }
                 r.parse("cbc:BalanceAmount", :Money) { line.balance_amount = it }
-                r.parse("cac:BillingReference", :BillingReference) { line.billing_reference = it }
+                r.parse("cac:BillingReference", :DocumentReference) { line.document_reference = it }
                 r.parse("cac:ExchangeRate", :ExchangeRate) { line.exchange_rate = it }
 
                 obj.lines.push(line)
