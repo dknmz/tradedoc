@@ -13,6 +13,7 @@ module Tradedoc
                 w.add("cbc:Name", obj.name)
               end
               w.render(obj.address, as: "PostalAddress")
+              w.render(obj.contact, as: "cac:Contact")
             end
           end
 
@@ -24,6 +25,7 @@ module Tradedoc
                 r.parse("cbc:Name", :String) { obj.name = it }
               end
               r.parse("cac:PostalAddress", :Address) { obj.address = it }
+              r.parse("cac:Contact", :Contact) { obj.contact = it }
             end
 
             obj

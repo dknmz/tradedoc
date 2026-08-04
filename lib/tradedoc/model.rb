@@ -6,6 +6,7 @@ end
 require_relative "model/base"
 
 # no dependencies
+require_relative "model/contact"
 require_relative "model/country"
 require_relative "model/period"
 require_relative "model/financial_account"

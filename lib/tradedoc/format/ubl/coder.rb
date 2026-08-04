@@ -7,6 +7,7 @@ end
 
 require_relative "coder/address"
 require_relative "coder/billing_reference"
+require_relative "coder/contact"
 require_relative "coder/country"
 require_relative "coder/date"
 require_relative "coder/financial_account"

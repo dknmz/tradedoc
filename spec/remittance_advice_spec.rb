@@ -15,6 +15,10 @@ RSpec.describe("Remittance Advice") do
           city: "Copenhagen",
           postal_code: "2300",
           country: {iso_code: "DK", name: "Denmark"}
+        },
+        contact: {
+          name: "Jens Sørensen",
+          email: "js@acme.test"
         }
       },
       supplier: {
@@ -24,6 +28,10 @@ RSpec.describe("Remittance Advice") do
           city: "Hamburg",
           postal_code: "20251",
           country: {iso_code: "DE", name: "Germany"}
+        },
+        contact: {
+          name: "Alice Mustermann",
+          email: "AliceM@tradeco.test"
         }
       },
       lines: [
