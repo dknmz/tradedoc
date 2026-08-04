@@ -8,7 +8,7 @@ module Tradedoc
           end
 
           def self.dump(w, obj, as:)
-            formatted = obj.to_d.round(2).to_s("F")
+            formatted = obj.to_d.to_s("F")
             w.add(as, formatted, currencyID: obj.currency.iso_code)
           end
 

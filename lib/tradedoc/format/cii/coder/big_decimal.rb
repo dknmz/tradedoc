@@ -7,9 +7,8 @@ module Tradedoc
             ::BigDecimal
           end
 
-          def self.dump(w, obj, as:, round: 2)
-            formatted = obj.round(round).to_s("F")
-            w.add(as, formatted)
+          def self.dump(w, obj, as:)
+            w.add(as, obj.to_s("F"))
           end
 
           def self.parse(r)
