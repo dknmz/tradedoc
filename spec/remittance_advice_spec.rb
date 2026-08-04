@@ -14,7 +14,8 @@ RSpec.describe("Remittance Advice") do
           street_name: "Ørestads Boulevard",
           city: "Copenhagen",
           postal_code: "2300",
-          country: {iso_code: "DK", name: "Denmark"}
+          country: {iso_code: "DK", name: "Denmark"},
+          subdivision: {}
         },
         contact: {
           name: "Jens Sørensen",
@@ -22,16 +23,17 @@ RSpec.describe("Remittance Advice") do
         }
       },
       supplier: {
-        name: "TradeCo Widgets",
+        name: "TradeCo Widgets SRL",
         address: {
-          street_name: "Eppendorfer Landstraße",
-          city: "Hamburg",
-          postal_code: "20251",
-          country: {iso_code: "DE", name: "Germany"}
+          street_name: "Strada Miriana",
+          city: "Milan",
+          postal_code: "20149",
+          country: {iso_code: "IT", name: "Italy"},
+          subdivision: {code: "MI", name: "Milano"}
         },
         contact: {
-          name: "Alice Mustermann",
-          email: "AliceM@tradeco.test"
+          name: "Vincenzo de Luca",
+          email: "vinny@tradeco.test"
         }
       },
       lines: [
@@ -60,7 +62,7 @@ RSpec.describe("Remittance Advice") do
         },
         receiving_account: {
           scheme_name: "IBAN",
-          account_number: "DE75512108001245126199"
+          account_number: "IT75512108001245126199"
         }
       }
     )

@@ -14,14 +14,19 @@ module Tradedoc
               w.render(obj.city, as: "CityName")
               w.render(obj.country.iso_code, as: "CountryID")
               w.render(obj.country.name, as: "CountryName")
+              w.render(obj.subdivision&.code, as: "CountrySubDivisionID")
+              w.render(obj.subdivision&.name, as: "CountrySubDivisionName")
             end
           end
 
           def self.parse(r)
             ruby_type.new.tap do |obj|
+              obj.subdivision = {}
               r.parse("ram:PostcodeCode", :String) { obj.postal_code = it }
               r.parse("ram:StreetName", :String) { obj.street_name = it }
               r.parse("ram:CityName", :String) { obj.city = it }
+              r.parse("ram:CountrySubDivisionName", :String) { obj.subdivision.name = it }
+              r.parse("ram:CountrySubDivisionID", :String) { obj.subdivision.code = it }
 
               obj.country = Model::Country.new.tap do |c|
                 r.parse("ram:CountryID", :String) { c.iso_code = it }

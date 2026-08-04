@@ -7,7 +7,7 @@ module Tradedoc
       has :city, String
       has :postal_code, String
       has :country, Country
-      has :subdivision_code, String
+      has :subdivision, CountrySubdivision
     end
   end
 end
