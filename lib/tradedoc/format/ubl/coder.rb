@@ -6,10 +6,12 @@ module Tradedoc
 end
 
 require_relative "coder/address"
+require_relative "coder/big_decimal"
 require_relative "coder/billing_reference"
 require_relative "coder/contact"
 require_relative "coder/country"
 require_relative "coder/date"
+require_relative "coder/exchange_rate"
 require_relative "coder/financial_account"
 require_relative "coder/money"
 require_relative "coder/payment_means"

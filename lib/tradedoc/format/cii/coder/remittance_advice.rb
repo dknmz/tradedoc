@@ -60,6 +60,7 @@ module Tradedoc
                   end
 
                   w.add("ram:ApplicableHeaderTradeSettlement") do
+                    w.render(line.exchange_rate, as: "ram:PaymentApplicableTradeCurrencyExchange")
                     w.add("ram:SpecifiedTradeSettlementHeaderMonetarySummation") do
                       w.render(line.balance_amount, as: "PaymentTotalAmount")
                     end
@@ -107,6 +108,7 @@ module Tradedoc
                   end
 
                   r.with_node("ram:ApplicableHeaderTradeSettlement") do
+                    r.parse("ram:PaymentApplicableTradeCurrencyExchange", :ExchangeRate) { line.exchange_rate = it }
                     r.with_node("ram:SpecifiedTradeSettlementHeaderMonetarySummation") do
                       r.parse("ram:GrandTotalAmount", :Money) { line.debit_amount = it }
                       r.parse("ram:TotalDiscountBasis", :Money) { line.credit_amount = it }

@@ -48,6 +48,13 @@ RSpec.describe("Remittance Advice") do
               uuid: "aae060e8-9b73-49f5-9c9e-322f9567c778",
               issue_date: Date.new(2026, 7, 13)
             }
+          },
+          exchange_rate: {
+            source_currency_code: "EUR",
+            target_currency_code: "USD",
+            rate: BigDecimal("1.18"),
+            date: Date.new(2026, 7, 13),
+            market_id: "ECB"
           }
         }
       ],

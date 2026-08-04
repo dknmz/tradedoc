@@ -17,6 +17,8 @@ module Tradedoc
       has :balance_amount, Money
 
       has :billing_reference, BillingReference
+
+      has :exchange_rate, ExchangeRate
     end
   end
 end
