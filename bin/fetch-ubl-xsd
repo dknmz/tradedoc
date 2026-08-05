@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# For a given UBL version, downloads all XSD files directly from OASIS.
+# This results in two directories:
+#   maindoc: for documents like Invoice, CreditNote, etc
+#   common:  for shared components
+
+set -euo pipefail
+
+ubl_version=2.4
+outdir=""
+url_base=https://docs.oasis-open.org/ubl/os-UBL-${ubl_version}/xsd
+only_main=(CreditNote Invoice RemittanceAdvice)
+
+usage() {
+  echo "Usage: $0 [-v UBL_VERSION] -o outdir"
+  exit 1
+}
+
+while getopts "v:o:" opt; do
+  case "${opt}" in
+    v)
+      ubl_version="${OPTARG}" ;;
+    o)
+      outdir="${OPTARG}" ;;
+    *)
+      usage ;;
+  esac
+done
+
+[ -z "${outdir}" ] && usage
+
+cat <<EOF
+Config:
+  UBL Version: ${ubl_version}
+  Output:      ${outdir}
+
+EOF
+
+maybe_fetch_file() {
+  url="${1}"
+  outpath="${2}"
+
+  if [ -f "${outpath}" ]; then
+    echo >&2 "[Skipping] ${outpath}. Already exists."
+  else
+    echo >&2 "[Downloading] ${url} to ${outpath}"
+    mkdir -p "$(dirname "${outpath}")"
+    curl -Ssf -o "${outpath}" "${url}"
+  fi
+}
+
+catalog_filename="UBL-${ubl_version}-catalog.xml"
+catalog_path="${outdir}/${catalog_filename}"
+
+maybe_fetch_file "${url_base}/${catalog_filename}" "${catalog_path}"
+
+rg 'uri="([^"]+)"' -0 -or '$1' "${catalog_path}" | while read -r f; do
+  for wanted in "${only_main}"; do
+    if [ "$(basename "$f")" == "UBL-${wanted}-${ubl_version}.xsd" ]; then
+      maybe_fetch_file "${url_base}/${f}" "${outdir}/${f}"
+      continue
+    fi
+  done
+  echo "[Skipping] $f. Not wanted."
+done
+
+# The catalog doesn't include all the files we need.
+# It's possible that this list of requirements may change between versions.
+# See https://docs.oasis-open.org/ubl/os-UBL-${ubl_version}/xsd/common/
+other=(
+  common/BDNDR-CCTS_CCT_SchemaModule-1.1.xsd
+  common/BDNDR-UnqualifiedDataTypes-1.1.xsd
+  "common/UBL-ExtensionContentDataType-${ubl_version}.xsd"
+  "common/UBL-QualifiedDataTypes-${ubl_version}.xsd"
+)
+for f in "${other[@]}"; do
+  maybe_fetch_file "${url_base}/${f}" "${outdir}/${f}"
+done
