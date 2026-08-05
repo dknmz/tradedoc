@@ -30,17 +30,12 @@ module Tradedoc
             # only one of these nodes will be present
 
             r.with_node(EL_IBAN) do
-              return ruby_type.new(
-                scheme_name: IBAN_SCHEME,
-                account_number: r.text
-              )
+              return ruby_type.new(scheme_name: IBAN_SCHEME, account_number: r.text)
             end
 
             r.with_node(EL_PROPRIETARY) do
-              return ruby_type.new(
-                scheme_name: attribute("schemeName"),
-                account_number: r.text
-              )
+              scheme_name = r.attribute("schemeName")
+              return ruby_type.new(scheme_name:, account_number: r.text)
             end
           end
         end

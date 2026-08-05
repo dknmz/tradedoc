@@ -10,6 +10,7 @@ require_relative "model/contact"
 require_relative "model/country"
 require_relative "model/country_subdivision"
 require_relative "model/exchange_rate"
+require_relative "model/financial_institution"
 require_relative "model/period"
 require_relative "model/financial_account"
 

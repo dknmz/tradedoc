@@ -25,11 +25,12 @@ RSpec.describe("Remittance Advice") do
       supplier: {
         name: "TradeCo Widgets SRL",
         address: {
-          street_name: "Strada Miriana",
-          city: "Milan",
-          postal_code: "20149",
-          country: {iso_code: "IT", name: "Italy"},
-          subdivision: {code: "MI", name: "Milano"}
+          street_name: "Pumpkin Street",
+          building_number: "123",
+          city: "Los Angeles",
+          postal_code: "90078",
+          country: {iso_code: "US", name: "United States"},
+          subdivision: {code: "CA", name: "California"}
         },
         contact: {
           name: "Vincenzo de Luca",
@@ -39,8 +40,7 @@ RSpec.describe("Remittance Advice") do
       lines: [
         {
           id: "1",
-          # debit_amount: Money.new(123456, "EUR"),
-          balance_amount: Money.new(123456, "EUR"),
+          balance_amount: Money.new(2_000_00, "USD"),
           document_reference: {
             id: "INV-1234",
             uuid: "aae060e8-9b73-49f5-9c9e-322f9567c778",
@@ -48,16 +48,15 @@ RSpec.describe("Remittance Advice") do
             issue_date: Date.new(2026, 7, 13)
           },
           exchange_rate: {
-            source_currency_code: "EUR",
-            target_currency_code: "USD",
-            rate: BigDecimal("1.18"),
+            source_currency_code: "USD",
+            target_currency_code: "EUR",
+            rate: BigDecimal("0.867121"),
             date: Date.new(2026, 7, 13),
-            market_id: "ECB"
+            market_id: "European Central Bank"
           }
         }
       ],
-      # total_debit_amount: Money.new(123456, "EUR"),
-      total_payment_amount: Money.new(123456, "EUR"),
+      total_payment_amount: Money.new(1_734_24, "EUR"),
       payment_means: {
         type_code: :debit_transfer,
         payment_id: "pay_ewuORTH7LDTZTV3p",
@@ -65,9 +64,14 @@ RSpec.describe("Remittance Advice") do
           scheme_name: "IBAN",
           account_number: "DK9520000123456789"
         },
+        # Perhaps not a realistic setup having IBAN sending to SWIFT, but this tests the code paths.
         receiving_account: {
-          scheme_name: "IBAN",
-          account_number: "IT75512108001245126199"
+          scheme_name: "SWIFT",
+          account_number: "1000000000",
+          financial_institution: {
+            id: "BOFAUS3NXXX",
+            national_clearing_system: "USABA"
+          }
         }
       }
     )
