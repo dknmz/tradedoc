@@ -16,6 +16,7 @@ module Tradedoc
               w.render(obj.country.name, as: "CountryName")
               w.render(obj.subdivision&.code, as: "CountrySubDivisionID")
               w.render(obj.subdivision&.name, as: "CountrySubDivisionName")
+              w.render(obj.building_number, as: "BuildingNumber")
             end
           end
 
@@ -27,6 +28,7 @@ module Tradedoc
               r.parse("ram:CityName", :String) { obj.city = it }
               r.parse("ram:CountrySubDivisionName", :String) { obj.subdivision.name = it }
               r.parse("ram:CountrySubDivisionID", :String) { obj.subdivision.code = it }
+              r.parse("ram:BuildingNumber", :String) { obj.building_number = it }
 
               obj.country = Model::Country.new.tap do |c|
                 r.parse("ram:CountryID", :String) { c.iso_code = it }
