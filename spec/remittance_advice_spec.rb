@@ -12,10 +12,15 @@ RSpec.describe("Remittance Advice") do
         name: "ACME Purchasing Corp.",
         address: {
           street_name: "Ørestads Boulevard",
+          building_number: "23A",
           city: "Copenhagen",
           postal_code: "2300",
           country: {iso_code: "DK", name: "Denmark"},
-          subdivision: {}
+          subdivision: {},
+          lines: [
+            "Ørestads Boulevard 23A",
+            "2300 Copenhagen"
+          ]
         },
         contact: {
           name: "Jens Sørensen",
@@ -30,7 +35,11 @@ RSpec.describe("Remittance Advice") do
           city: "Los Angeles",
           postal_code: "90078",
           country: {iso_code: "US", name: "United States"},
-          subdivision: {code: "CA", name: "California"}
+          subdivision: {code: "CA", name: "California"},
+          lines: [
+            "123 Pumpkin Street",
+            "Los Angeles, CA 90078"
+          ]
         },
         contact: {
           name: "Vincenzo de Luca",
