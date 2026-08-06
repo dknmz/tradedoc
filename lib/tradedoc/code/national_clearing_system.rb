@@ -82,7 +82,7 @@ module Tradedoc
         end
       end
 
-      register "AUBSB", "AustralianBCBID"
+      register "AUBSB", "AustralianBSBID"
       register "CACPA", "CanadianPaymentsAssociationID"
       register "GBDSC", "UKSortCodeID"
       register "HKNCC", "HongKongBankID"
