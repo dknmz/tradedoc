@@ -16,6 +16,12 @@ module Tradedoc
       has :payment_id, String
 
       has :instruction_id, String
+
+      # Zero or many lines of messages that were sent to the bank about the payment.
+      # This is the text that the receiving party will typically see in their account
+      # with a label like "message" or "details".
+      # Banking Circle for example allows 4 lines of "remittance information".
+      has_many :messages, String
     end
   end
 end

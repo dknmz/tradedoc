@@ -81,7 +81,13 @@ RSpec.describe("Remittance Advice") do
             id: "BOFAUS3NXXX",
             national_clearing_system: "USABA"
           }
-        }
+        },
+        messages: [
+          "/INV/2026-00927",
+          "PART PAYMENT",
+          "ACME CORP LTD",
+          "REF PO-7734"
+        ]
       }
     )
   end

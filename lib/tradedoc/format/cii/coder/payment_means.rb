@@ -11,6 +11,10 @@ module Tradedoc
             w.add("ram:SpecifiedTradeSettlementPaymentMeans") do
               w.add("ram:TypeCode", obj.type_code.code, listAgencyID: Code::Agency::CEFACT)
 
+              obj.messages.each do |msg|
+                w.add("ram:Information", msg)
+              end
+
               w.render(obj.sending_account, as: "PayerPartyDebtorFinancialAccount")
               w.render(obj.receiving_account, as: "PayeePartyCreditorFinancialAccount")
 
@@ -22,6 +26,10 @@ module Tradedoc
           def self.parse(r)
             ruby_type.new.tap do |pm|
               r.parse("ram:TypeCode", :String) { pm.type_code = it }
+
+              r.with_nodes("ram:Information") do
+                pm.messages.push(r.text)
+              end
 
               r.parse("ram:PayerPartyDebtorFinancialAccount", :FinancialAccount) { pm.sending_account = it }
               r.parse("ram:PayerSpecifiedDebtorFinancialInstitution", :FinancialInstitution) do
