@@ -12,7 +12,7 @@ module Tradedoc
           in Symbol => id
             @values[id]
           in other
-            "can't lookup by '#{other}'"
+            raise "can't lookup by '#{other.class}'"
           end
         end
 
@@ -27,6 +27,8 @@ module Tradedoc
         def parse(input)
           get!(input)
         end
+
+        private
 
         def register(cefact_id, id, label: nil)
           @values ||= {}
