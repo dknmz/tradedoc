@@ -35,6 +35,8 @@ module Tradedoc
         return [fmt, dt]
       end
     end
+
+    nil
   end
 
   # Given an XML document or XML string, detect the format, document type, and
