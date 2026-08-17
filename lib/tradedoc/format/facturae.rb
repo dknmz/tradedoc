@@ -7,6 +7,10 @@ module Tradedoc
       extend Finders
       extend XMLSerialization
 
+      def self.file_extensions
+        Set[".xml", ".xsig"]
+      end
+
       module Coder
         class Invoice
           # Each revision of the spec gets its own namespace.

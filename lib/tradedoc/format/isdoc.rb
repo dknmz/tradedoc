@@ -6,6 +6,10 @@ module Tradedoc
       extend Finders
       extend XMLSerialization
 
+      def self.file_extensions
+        Set[".isdoc"]
+      end
+
       module Coder
         class Invoice
           NS = {

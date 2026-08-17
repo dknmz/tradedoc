@@ -20,6 +20,11 @@ module Tradedoc
         end
       end
 
+      # For faster detection of what files may be parsable by this format
+      def file_extensions
+        Set[".xml"]
+      end
+
       # List of coders that are document types.
       # These are the only ones that can be read/written to/from XML properly.
       #

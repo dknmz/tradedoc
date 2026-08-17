@@ -36,6 +36,13 @@ module Tradedoc
     ]
   end
 
+  # List of all possible file extensions that may be parsable by a format in this library
+  #
+  # @return [Set<String>]
+  def self.file_extensions
+    formats.reduce(Set[]) { |memo, fmt| memo + fmt.file_extensions }
+  end
+
   # Detect the format and document type of a given source
   #
   # @return [Array<Module, Class>]

@@ -17,6 +17,14 @@ RSpec.describe Tradedoc do
     end
   end
 
+  describe ".file_extensions" do
+    subject(:result) { Tradedoc.file_extensions }
+
+    it "returns the expected set" do
+      expect(result).to(eq(Set[".isdoc", ".xml", ".xsig"]))
+    end
+  end
+
   describe ".parse" do
     subject(:result) { Tradedoc.parse(source) }
 
