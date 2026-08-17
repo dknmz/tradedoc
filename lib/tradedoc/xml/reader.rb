@@ -92,10 +92,11 @@ module Tradedoc
       # @param xpath [String]
       # @param coder_ref [Class | Symbol]
       #   Any class that responds to `.parse(r)` where r is this `Reader`
+      # @param opts [Hash] Options to pass to the underlying parser
       # @return [Object | nil]
-      def parse(xpath, coder_ref)
+      def parse(xpath, coder_ref, **opts)
         coder_class = self.format.coder_for(coder_ref)
-        value = with_node(xpath) { coder_class.parse(self) }
+        value = with_node(xpath) { coder_class.parse(self, **opts) }
 
         # Allows parse callers to do something with the parsed value e.g.
         # parse("//node", Address) { some_obj.address = it }
