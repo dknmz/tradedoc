@@ -22,7 +22,18 @@ module Tradedoc
   #
   # @return [Set<Module>]
   def self.formats
-    Set[Format::CII, Format::UBL]
+    Set[
+      Format::APEH,
+      Format::CII,
+      Format::FacturaE,
+      Format::FatturaPA,
+      Format::ISDOC,
+      Format::KSEF,
+      Format::MyData,
+      Format::NAV,
+      Format::UBL,
+      Format::ZugferdV1
+    ]
   end
 
   # Detect the format and document type of a given source

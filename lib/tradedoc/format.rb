@@ -93,5 +93,13 @@ module Tradedoc
   end
 end
 
+require_relative "format/apeh"
 require_relative "format/cii"
+require_relative "format/facturae"
+require_relative "format/fatturapa"
+require_relative "format/isdoc"
+require_relative "format/ksef"
+require_relative "format/mydata"
+require_relative "format/nav"
 require_relative "format/ubl"
+require_relative "format/zugferdv1"
