@@ -106,6 +106,20 @@ module Tradedoc
         end
       end
 
+      def parse_list(xpath, coder_ref, **opts)
+        coder_class = self.format.coder_for(coder_ref)
+
+        values = with_nodes(xpath) do
+          coder_class.parse(self, **opts)
+        end
+
+        if block_given?
+          yield values
+        end
+
+        values
+      end
+
       def text
         node.text
       end
