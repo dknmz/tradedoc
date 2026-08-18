@@ -3,6 +3,8 @@ module Tradedoc
     # Wrapper for a `Nokogiri::XML::Builder` that creates an interface for common
     # build actions, namely rendering "components" easily.
     class Writer
+      InvalidNodeNameError = Class.new(Error)
+
       # @param xml [Nokogiri::XML::Builder]
       # @param format [Module]
       #   Any module responding to `.coder_for` and returning a coder.
@@ -16,6 +18,14 @@ module Tradedoc
       # Normally with a Nokogiri builder you'd do `xml["ns"].ElemName(text)`
       # but with this you'd do `writer.add("ns:ElemName", value)`
       def add(name, ...)
+        if name.include?("/")
+          raise InvalidNodeNameError, "element name cannot include `/`"
+        end
+
+        if (c = name.scan(":").count) && c > 1
+          raise InvalidNodeNameError, "element name can't include `:` multiple times"
+        end
+
         xml.public_send(name, ...)
       end
 
