@@ -19,11 +19,11 @@ module Tradedoc
       # but with this you'd do `writer.add("ns:ElemName", value)`
       def add(name, ...)
         if name.include?("/")
-          raise InvalidNodeNameError, "element name cannot include `/`"
+          raise InvalidNodeNameError, "element name #{name} includes `/`"
         end
 
         if (c = name.scan(":").count) && c > 1
-          raise InvalidNodeNameError, "element name can't include `:` multiple times"
+          raise InvalidNodeNameError, "element name #{name} includes `:` multiple times"
         end
 
         xml.public_send(name, ...)
