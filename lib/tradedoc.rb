@@ -63,7 +63,7 @@ module Tradedoc
   # Returns `nil` when the format or document type isn't supported.
   #
   # @param source [Nokogiri::XML::Document | String]
-  # @return [Object]
+  # @return [Object | nil]
   def self.parse(source)
     xml = xml_from(source)
     if detect(xml) in [fmt, coder]

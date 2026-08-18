@@ -14,6 +14,7 @@ module Tradedoc
       has :payment_means, PaymentMeans
 
       has_many :lines, RemittanceAdviceLine
+      alias line_items lines
     end
   end
 end

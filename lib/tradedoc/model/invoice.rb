@@ -49,6 +49,7 @@ module Tradedoc
 
       # [BG-25]
       has_many :lines, InvoiceLine
+      alias line_items lines
     end
   end
 end
