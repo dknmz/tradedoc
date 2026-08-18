@@ -42,6 +42,12 @@ module Tradedoc
         coder_class.dump(self, obj, **opts)
       end
 
+      def render_list(objects, coder_ref = nil, **opts)
+        return if objects.nil? || objects.none?
+
+        objects.each { render(it, coder_ref, **opts) }
+      end
+
       private
 
       attr_reader :xml, :format
