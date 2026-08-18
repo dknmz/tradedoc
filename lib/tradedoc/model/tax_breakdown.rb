@@ -1,5 +1,6 @@
 module Tradedoc
   module Model
+    # [BG-23]
     class TaxBreakdown < Base
       # [BT-110] Tax total for the whole document
       has :total_tax, Money

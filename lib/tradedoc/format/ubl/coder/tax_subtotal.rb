@@ -7,21 +7,19 @@ module Tradedoc
             Model::TaxSubtotal
           end
 
-          def self.dump(w, obj)
-            raise NotImplementedError
+          def self.dump(w, obj, as: "cac:TaxSubtotal")
+            w.add(as) do
+              w.render(obj.taxable_amount, as: "TaxableAmount")
+              w.render(obj.tax_amount, as: "TaxAmount")
+              w.render(obj.tax_category, as: "cac:TaxCategory")
+            end
           end
 
           def self.parse(r)
             ruby_type.new.tap do |subtotal|
               r.parse("cbc:TaxableAmount", :Money) { subtotal.taxable_amount = it }
               r.parse("cbc:TaxAmount", :Money) { subtotal.tax_amount = it }
-              r.with_node("cac:TaxCategory") do
-                r.parse("cbc:ID", :String) { subtotal.category_code = it }
-                r.parse("cbc:Percent", :BigDecimal) { subtotal.rate_percent = it }
-                r.parse("cbc:TaxExemptionReason", :String) { subtotal.exemption_reason = it }
-                r.parse("cbc:TaxExemptionReasonCode", :String) { subtotal.exemption_reason_code = it }
-                r.parse("cac:TaxScheme/cbc:ID", :String) { subtotal.tax_scheme = it }
-              end
+              r.parse("cac:TaxCategory", :TaxCategory) { subtotal.tax_category = it }
             end
           end
         end

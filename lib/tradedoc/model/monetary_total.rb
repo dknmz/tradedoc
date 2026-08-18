@@ -15,6 +15,8 @@ module Tradedoc
       # [BT-109] aka. net amount
       has :tax_exclusive, Money
 
+      has :tax_breakdown, TaxBreakdown
+
       # [BT-112]
       has :tax_inclusive, Money
 

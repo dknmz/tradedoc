@@ -21,6 +21,32 @@ module Tradedoc
 
       # [BG-29] Price breakdown / details
       has :price, Price
+
+      # UBL and CII deal with line-level tax differently.
+      # UBL has a `TaxTotal` at the line level with the amount under it,
+      # then under `Item` has the `ClassifiedTaxCategory`, so they're totally separate.
+      #
+      # CII by contrast uses one `ApplicableTradeTax` element for `TaxSubtotal` which
+      # combines the total tax and tax category into one.
+      # To make access easier, we'll store the amount and category separately and then
+      # have accessors for reading and writing as a `TaxSubtotal`.
+      has :total_tax, Money
+
+      has :tax_category, TaxCategory
+
+      def tax_subtotal
+        TaxSubtotal.new(tax_amount: total_tax, tax_category:).freeze
+      end
+
+      def tax_subtotal=(ts)
+        if (total_tax = ts.tax_amount)
+          self.total_tax = total_tax
+        end
+
+        if (tax_category = ts.tax_category)
+          self.tax_category = tax_category
+        end
+      end
     end
   end
 end

@@ -6,7 +6,8 @@ module Tradedoc
           NS = {
             "xmlns:inv" => "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2",
             "xmlns:cac" => "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2",
-            "xmlns:cbc" => "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+            "xmlns:cbc" => "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2",
+            "xmlns:ext" => "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"
           }.freeze
 
           private_constant :NS
@@ -25,22 +26,33 @@ module Tradedoc
           end
 
           def self.dump(w, obj)
-            w.add("inv:Invoice") do
+            w.add("inv:Invoice", NS) do
+              w.render(obj.specification_id, as: "cbc:CustomizationID")
               w.render(obj.invoice_number, as: "cbc:ID")
-              w.render(obj.issue_date, as: "cbc:IssueDate")
+              w.render(obj.issue_date, as: "IssueDate")
               w.render(obj.due_date, as: "cbc:DueDate")
-              w.add("cbc:InvoiceTypeCode", obj.invoice_type_code, listAgencyID: Code::Agency::CEFACT)
+              w.render(obj.invoice_type_code, as: "cbc:InvoiceTypeCode", listAgencyID: Code::Agency::CEFACT)
               w.render(obj.note, as: "cbc:Note")
               w.render(obj.currency_code, as: "cbc:DocumentCurrencyCode", listAgencyID: Code::Agency::CEFACT)
-              w.render(obj.invoice_period)
+              w.render(obj.invoice_period, as: "InvoicePeriod")
               if (po_number = obj.purchase_order_number)
                 w.add("cac:OrderReference") do
                   w.render(po_number, as: "cbc:ID")
                 end
               end
-              w.render(obj.supplier, as: "cac:AccountingSupplierParty")
-              w.render(obj.buyer, as: "cac:AccountingCustomerParty")
+              if (supplier = obj.supplier)
+                w.add("cac:AccountingSupplierParty") do
+                  w.render(supplier, as: "cac:Party")
+                end
+              end
+              if (buyer = obj.buyer)
+                w.add("cac:AccountingCustomerParty") do
+                  w.render(buyer, as: "cac:Party")
+                end
+              end
+              w.render(obj.monetary_total.tax_breakdown)
               w.render(obj.monetary_total)
+              w.render_list(obj.lines)
             end
           end
 
@@ -54,38 +66,11 @@ module Tradedoc
                 r.parse("cbc:Note", :String) { inv.note = it }
                 r.parse("cbc:DocumentCurrencyCode", :String) { inv.currency_code = it }
                 r.parse("cac:InvoicePeriod", :Period) { inv.invoice_period = it }
-                r.parse("cac:AccountingSupplierParty", :TradeParty) { inv.supplier = it }
-                r.parse("cac:AccountingCustomerParty", :TradeParty) { inv.buyer = it }
+                r.parse("cac:AccountingSupplierParty/cac:Party", :TradeParty) { inv.supplier = it }
+                r.parse("cac:AccountingCustomerParty/cac:Party", :TradeParty) { inv.buyer = it }
                 r.parse("cac:LegalMonetaryTotal", :MonetaryTotal) { inv.monetary_total = it }
-
-                r.with_node("cac:TaxTotal") do
-                  inv.tax_breakdown = Model::TaxBreakdown.new.tap do |tax|
-                    r.parse("cbc:TaxAmount", :Money) { tax.total_tax = it }
-                    r.parse_list("cac:TaxSubtotal", :TaxSubtotal) { tax.subtotals = it }
-                  end
-                end
-
-                r.with_nodes("cac:InvoiceLine") do
-                  line = Model::InvoiceLine.new
-
-                  r.parse("cbc:ID", :String) { line.id = it }
-                  r.parse("cbc:InvoicedQuantity", :BigDecimal) { line.invoiced_quantity = it }
-                  r.parse("cbc:LineExtensionAmount", :Money) { line.total_excluding_tax = it }
-
-                  r.with_node("cac:Item") do
-                    r.parse("cbc:Description", :String) { line.description = it }
-                    r.parse("cbc:Name", :String) { line.name = it }
-                  end
-
-                  r.with_node("cac:Price") do
-                    line.price = Model::Price.new.tap do |price|
-                      r.parse("cbc:PriceAmount", :Money) { price.net = it }
-                      r.parse("cbc:BaseQuantity", :BigDecimal) { price.base_quantity = it }
-                    end
-                  end
-
-                  inv.lines.push(line)
-                end
+                r.parse("cac:TaxTotal", :TaxBreakdown) { inv.monetary_total.tax_breakdown = it }
+                r.parse_list("cac:InvoiceLine", :InvoiceLine) { inv.lines = it }
 
                 r.with_node("cac:OrderReference") do
                   r.parse("cbc:ID", :String) { inv.purchase_order_number = it }

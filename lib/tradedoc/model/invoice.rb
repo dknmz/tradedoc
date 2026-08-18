@@ -29,6 +29,11 @@ module Tradedoc
       has :note, String
       has :payment_means, PaymentMeans
 
+      # [BT-24]
+      # Identifier for the set of rules, content, conformity, etc.
+      # The standard seen for EU invoice is `urn:cen.eu:en16931:2017`
+      has :specification_id, String
+
       # [BG-5]
       has :invoice_period, Period
 
@@ -44,12 +49,9 @@ module Tradedoc
       # [BG-22]
       has :monetary_total, MonetaryTotal
 
-      # [BG-23]
-      has :tax_breakdown, TaxBreakdown
-
       # [BG-25]
       has_many :lines, InvoiceLine
-      alias line_items lines
+      alias_method :line_items, :lines
     end
   end
 end

@@ -9,14 +9,14 @@ module Tradedoc
 
           def self.dump(w, obj, as: "cac:LegalMonetaryTotal")
             w.add(as) do
-              w.render(obj.line_items_tax_exclusive, as: "cbc:LineExtensionAmount")
-              w.render(obj.tax_exclusive, as: "cbc:TaxExclusiveAmount")
-              w.render(obj.tax_inclusive, as: "cbc:TaxInclusiveAmount")
-              w.render(obj.discounts, as: "cbc:AllowanceTotalAmount")
-              w.render(obj.charges, as: "cbc:ChargeTotalAmount")
-              w.render(obj.prepaid, as: "cbc:PrepaidAmount")
-              w.render(obj.rounding, as: "cbc:PayableRoundingAmount")
-              w.render(obj.payable, as: "cbc:PayableAmount")
+              w.render(obj.line_items_tax_exclusive, as: "LineExtensionAmount")
+              w.render(obj.tax_exclusive, as: "TaxExclusiveAmount")
+              w.render(obj.tax_inclusive, as: "TaxInclusiveAmount")
+              w.render(obj.discounts, as: "AllowanceTotalAmount")
+              w.render(obj.charges, as: "ChargeTotalAmount")
+              w.render(obj.prepaid, as: "PrepaidAmount")
+              w.render(obj.rounding, as: "PayableRoundingAmount")
+              w.render(obj.payable, as: "PayableAmount")
             end
           end
 

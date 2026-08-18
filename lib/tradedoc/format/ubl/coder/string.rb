@@ -7,8 +7,8 @@ module Tradedoc
             ::String
           end
 
-          def self.dump(w, obj, as:)
-            w.add(as, obj)
+          def self.dump(w, obj, as:, **opts)
+            w.add(as, obj, **opts)
           end
 
           def self.parse(r, strip: true, nilify: true)

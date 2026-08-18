@@ -18,6 +18,13 @@ RSpec.describe(Tradedoc::Model::Invoice) do
       parsed = Tradedoc.parse(sample_xml)
       expect(parsed).to(be_a(described_class))
     end
+
+    it "can parse a sample file and dump it back to valid CII" do
+      parsed = Tradedoc.parse(sample_xml)
+      expect(parsed).to(be_a(described_class))
+
+      validate_schema(parsed.dump(:cii), "spec/format/cii/xsd/data/standard/CrossIndustryInvoice_100pD16B.xsd")
+    end
   end
 
   describe "FacturaE" do
@@ -79,6 +86,13 @@ RSpec.describe(Tradedoc::Model::Invoice) do
     it "can parse a sample file" do
       parsed = Tradedoc.parse(sample_xml)
       expect(parsed).to(be_a(described_class))
+    end
+
+    it "can parse a sample file and dump it back to valid UBL" do
+      parsed = Tradedoc.parse(sample_xml)
+      expect(parsed).to(be_a(described_class))
+
+      validate_schema(parsed.dump(:ubl), "spec/format/ubl/xsd/maindoc/UBL-Invoice-2.4.xsd")
     end
   end
 
