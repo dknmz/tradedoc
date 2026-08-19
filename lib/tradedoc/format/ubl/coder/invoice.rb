@@ -30,7 +30,7 @@ module Tradedoc
               w.render(obj.specification_id, as: "cbc:CustomizationID")
               w.render(obj.invoice_number, as: "cbc:ID")
               w.render(obj.issue_date, as: "IssueDate")
-              w.render(obj.due_date, as: "cbc:DueDate")
+              w.render(obj.due_date, as: "DueDate")
               w.render(obj.invoice_type_code, as: "cbc:InvoiceTypeCode", listAgencyID: Code::Agency::CEFACT)
               w.render(obj.note, as: "cbc:Note")
               w.render(obj.currency_code, as: "cbc:DocumentCurrencyCode", listAgencyID: Code::Agency::CEFACT)
@@ -66,14 +66,21 @@ module Tradedoc
                 r.parse("cbc:Note", :String) { inv.note = it }
                 r.parse("cbc:DocumentCurrencyCode", :String) { inv.currency_code = it }
                 r.parse("cac:InvoicePeriod", :Period) { inv.invoice_period = it }
-                r.parse("cac:AccountingSupplierParty/cac:Party", :TradeParty) { inv.supplier = it }
-                r.parse("cac:AccountingCustomerParty/cac:Party", :TradeParty) { inv.buyer = it }
+                r.parse("cac:AccountingSupplierParty", :TradeParty) { inv.supplier = it }
+                r.parse("cac:AccountingCustomerParty", :TradeParty) { inv.buyer = it }
+                r.parse_list("cac:PaymentMeans", :PaymentMeans) { inv.payment_means = it }
                 r.parse("cac:LegalMonetaryTotal", :MonetaryTotal) { inv.monetary_total = it }
                 r.parse("cac:TaxTotal", :TaxBreakdown) { inv.monetary_total.tax_breakdown = it }
                 r.parse_list("cac:InvoiceLine", :InvoiceLine) { inv.lines = it }
 
                 r.with_node("cac:OrderReference") do
                   r.parse("cbc:ID", :String) { inv.purchase_order_number = it }
+                end
+
+                # The due date may have been put into payment means
+                # This is allowed per the Peppol docs
+                if inv.due_date.nil?
+                  r.parse("cac:PaymentMeans/cbc:PaymentDueDate", :Date) { inv.due_date = it }
                 end
               end
             end

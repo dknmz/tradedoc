@@ -96,6 +96,7 @@ module Tradedoc
                       inv.currency_code = it
                       default_currency = inv.currency_code
                     end
+                    r.parse_list("ram:SpecifiedTradeSettlementPaymentMeans", :PaymentMeans) { inv.payment_means = it }
                     r.with_node("ram:SpecifiedTradePaymentTerms") do
                       r.parse("ram:DueDateDateTime", :Date) { inv.due_date = it }
                     end

@@ -44,7 +44,7 @@ module Tradedoc
       has :buyer, TradeParty
 
       # [BG-17]
-      has :payment_means, PaymentMeans
+      has_many :payment_means, PaymentMeans
 
       # [BG-22]
       has :monetary_total, MonetaryTotal

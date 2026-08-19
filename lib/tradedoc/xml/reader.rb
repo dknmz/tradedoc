@@ -96,11 +96,15 @@ module Tradedoc
       # @return [Object | nil]
       def parse(xpath, coder_ref, **opts)
         coder_class = self.format.coder_for(coder_ref)
-        value = with_node(xpath) { coder_class.parse(self, **opts) }
+        node_exists = false
+        value = with_node(xpath) do
+          node_exists = true
+          coder_class.parse(self, **opts)
+        end
 
         # Allows parse callers to do something with the parsed value e.g.
         # parse("//node", Address) { some_obj.address = it }
-        if block_given?
+        if block_given? && node_exists
           yield value
         else
           value

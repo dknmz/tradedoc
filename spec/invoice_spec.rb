@@ -1,23 +1,97 @@
 RSpec.describe(Tradedoc::Model::Invoice) do
+  subject(:parsed) { Tradedoc.parse(sample_xml) }
+
+  shared_examples_for "format identification" do |expected_format|
+    # We'll assume the parent `describe` block is the name/label of the format
+    expected_format ||= metadata.dig(:parent_example_group, :description)
+
+    it "identifies the document as #{expected_format}" do
+      expect(Tradedoc.detect(sample_xml)[0].label).to(eq(expected_format))
+    end
+  end
+
+  shared_examples_for "parsing essential attributes" do
+    it "includes invoice essentials" do
+      expect(parsed).to(have_attributes(
+        issue_date: be_a(Date),
+        invoice_number: be_a(String),
+        invoice_type_code: "380",
+        currency_code: be_a(String),
+        due_date: be_a(Date)
+      ))
+    end
+
+    it "includes payment means" do
+      expect(parsed.payment_means.count).to(be_positive)
+      expect(parsed.payment_means).to(all(have_attributes(
+        type_code: be_a(Tradedoc::Code::PaymentMeansType),
+        receiving_account: be_a(Tradedoc::Model::FinancialAccount)
+      )))
+    end
+
+    it "include supplier details" do
+      expect(parsed.supplier).to(have_attributes(
+        name: be_a(String)
+      ))
+      expect(parsed.buyer.address).to(have_attributes(
+        country: be_a(Tradedoc::Model::Country)
+      ))
+    end
+
+    it "include buyer details" do
+      expect(parsed.buyer).to(have_attributes(
+        name: be_a(String)
+      ))
+      expect(parsed.buyer.address).to(have_attributes(
+        country: be_a(Tradedoc::Model::Country)
+      ))
+    end
+
+    it "includes monetary totals" do
+      expect(parsed.monetary_total).to(have_attributes(
+        line_items_tax_exclusive: be_a(Money),
+        tax_exclusive: be_a(Money),
+        tax_inclusive: be_a(Money),
+        payable: be_a(Money)
+      ))
+
+      expect(parsed.monetary_total.tax_breakdown).to(have_attributes(
+        total_tax: be_a(Money)
+      ))
+    end
+
+    it "include line items" do
+      line_items = parsed.line_items
+
+      expect(line_items.count).to(be_positive)
+
+      expect(line_items).to(all(have_attributes(
+        id: be_a(String),
+        total_excluding_tax: be_a(Money)
+      )))
+
+      expect(line_items.map(&:product)).to(all(have_attributes(
+        name: be_a(String)
+      )))
+
+      expect(line_items.map(&:price)).to(all(have_attributes(
+        net: be_a(Money)
+      )))
+    end
+  end
+
   describe "APEH" do
     let(:sample_xml) { File.read("spec/format/apeh/samples/invoice.xml") }
 
-    it "can be identified as APEH" do
-      expect(Tradedoc.detect(sample_xml)[0]).to(eq(Tradedoc::Format::APEH))
-    end
+    it_behaves_like "format identification"
   end
 
   describe "CII" do
     let(:sample_xml) { File.read("spec/format/cii/samples/CII_example1.xml") }
 
-    it "can be identified as CII" do
-      expect(Tradedoc.detect(sample_xml)[0]).to(eq(Tradedoc::Format::CII))
-    end
+    it_behaves_like "format identification"
 
-    it "can parse a sample file" do
-      parsed = Tradedoc.parse(sample_xml)
-      expect(parsed).to(be_a(described_class))
-    end
+    it_behaves_like "parsing essential attributes"
 
     it "can parse a sample file and dump it back to valid CII" do
       parsed = Tradedoc.parse(sample_xml)
@@ -28,10 +102,10 @@ RSpec.describe(Tradedoc::Model::Invoice) do
   end
 
   describe "FacturaE" do
-    it "can detect different versions" do
-      Dir.glob("spec/format/facturae/facturae-*.{xml,xsig}").each do |path|
-        sample_xml = File.read(path)
-        expect(Tradedoc.detect(sample_xml)[0]).to(eq(Tradedoc::Format::FacturaE))
+    Dir.glob("spec/format/facturae/samples/facturae-*.{xml,xsig}").each do |path|
+      context "with #{File.basename(path)}" do
+        let(:sample_xml) { File.read(path) }
+        it_behaves_like "format identification", "FacturaE"
       end
     end
   end
@@ -39,54 +113,39 @@ RSpec.describe(Tradedoc::Model::Invoice) do
   describe "FatturaPA" do
     let(:sample_xml) { File.read("spec/format/fatturapa/samples/IT01234567890_FPR02.xml") }
 
-    it "can be identified as FatturaPA" do
-      expect(Tradedoc.detect(sample_xml)[0]).to(eq(Tradedoc::Format::FatturaPA))
-    end
+    it_behaves_like "format identification"
   end
 
   describe "ISDOC" do
     let(:sample_xml) { File.read("spec/format/isdoc/samples/invoice.isdoc") }
 
-    it "can be identified as ISDOC" do
-      expect(Tradedoc.detect(sample_xml)[0]).to(eq(Tradedoc::Format::ISDOC))
-    end
+    it_behaves_like "format identification"
   end
 
   describe "KSeF" do
     let(:sample_xml) { File.read("spec/format/ksef/samples/invoice-template-fa-3-with-custom-Subject2.xml") }
 
-    it "can be identified as KSeF" do
-      expect(Tradedoc.detect(sample_xml)[0]).to(eq(Tradedoc::Format::KSEF))
-    end
+    it_behaves_like "format identification"
   end
 
   describe "myDATA" do
     let(:sample_xml) { File.read("spec/format/mydata/samples/SampleXML_1.1_taxes_per_line_MYDATA_GR.xml") }
 
-    it "can be identified as myDATA" do
-      expect(Tradedoc.detect(sample_xml)[0]).to(eq(Tradedoc::Format::MyData))
-    end
+    it_behaves_like "format identification"
   end
 
   describe "NAV" do
     let(:sample_xml) { File.read("spec/format/nav/samples/invoice.xml") }
 
-    it "can be identified as NAV" do
-      expect(Tradedoc.detect(sample_xml)[0]).to(eq(Tradedoc::Format::NAV))
-    end
+    it_behaves_like "format identification"
   end
 
   describe "UBL" do
     let(:sample_xml) { File.read("spec/format/ubl/samples/UBL-Invoice-2.1-Example.xml") }
 
-    it "can be identified as FatturaPA" do
-      expect(Tradedoc.detect(sample_xml)[0]).to(eq(Tradedoc::Format::UBL))
-    end
+    it_behaves_like "format identification"
 
-    it "can parse a sample file" do
-      parsed = Tradedoc.parse(sample_xml)
-      expect(parsed).to(be_a(described_class))
-    end
+    it_behaves_like "parsing essential attributes"
 
     it "can parse a sample file and dump it back to valid UBL" do
       parsed = Tradedoc.parse(sample_xml)
@@ -96,11 +155,9 @@ RSpec.describe(Tradedoc::Model::Invoice) do
     end
   end
 
-  describe "ZUGFeRD V1" do
+  describe "ZUGFeRDv1" do
     let(:sample_xml) { File.read("spec/format/zugferdv1/samples/ZUGFeRD-invoice.xml") }
 
-    it "can be identified as ZUGFeRD V1" do
-      expect(Tradedoc.detect(sample_xml)[0]).to(eq(Tradedoc::Format::ZugferdV1))
-    end
+    it_behaves_like "format identification"
   end
 end
