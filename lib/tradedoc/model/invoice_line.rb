@@ -13,11 +13,7 @@ module Tradedoc
       # [BT-131] Total after discounts and charges, excluding vat
       has :total_excluding_tax, Money
 
-      # [BT-153] Required
-      has :name, String
-
-      # [BT-154]
-      has :description, String
+      has :product, Product
 
       # [BG-29] Price breakdown / details
       has :price, Price
@@ -32,10 +28,8 @@ module Tradedoc
       # have accessors for reading and writing as a `TaxSubtotal`.
       has :total_tax, Money
 
-      has :tax_category, TaxCategory
-
       def tax_subtotal
-        TaxSubtotal.new(tax_amount: total_tax, tax_category:).freeze
+        TaxSubtotal.new(tax_amount: total_tax, tax_category: product.tax_category).freeze
       end
 
       def tax_subtotal=(ts)
@@ -44,7 +38,7 @@ module Tradedoc
         end
 
         if (tax_category = ts.tax_category)
-          self.tax_category = tax_category
+          product.tax_category = tax_category
         end
       end
     end

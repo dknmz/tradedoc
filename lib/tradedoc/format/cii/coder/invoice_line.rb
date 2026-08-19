@@ -14,7 +14,9 @@ module Tradedoc
               end
 
               w.add("ram:SpecifiedTradeProduct") do
-                w.render(obj.name, as: "ram:Name")
+                w.render(obj.product.seller_assigned_id, as: "ram:SellerAssignedID")
+                w.render(obj.product.name, as: "ram:Name")
+                w.render(obj.product.description, as: "ram:Description")
               end
 
               w.add("ram:SpecifiedLineTradeAgreement") do
@@ -58,7 +60,11 @@ module Tradedoc
               end
             end
             r.with_node("ram:SpecifiedTradeProduct") do
-              r.parse("ram:Name", :String) { line.name = it }
+              line.product = Model::Product.new.tap do |product|
+                r.parse("ram:SellerAssignedID", :String) { product.seller_assigned_id = it }
+                r.parse("ram:Name", :String) { product.name = it }
+                r.parse("ram:Description", :String) { product.description = it }
+              end
             end
             r.with_node("ram:SpecifiedLineTradeDelivery") do
               r.parse("ram:BilledQuantity", :BigDecimal) { line.invoiced_quantity = it }

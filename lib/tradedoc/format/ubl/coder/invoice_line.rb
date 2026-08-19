@@ -18,11 +18,7 @@ module Tradedoc
                 end
               end
 
-              w.add("cac:Item") do
-                w.render(obj.description, as: "cbc:Description")
-                w.render(obj.name, as: "cbc:Name")
-                w.render(obj.tax_category, as: "cac:ClassifiedTaxCategory")
-              end
+              w.render(obj.product)
 
               if (price = obj.price)
                 w.add("cac:Price") do
@@ -41,13 +37,7 @@ module Tradedoc
               r.with_node("cac:TaxTotal") do
                 r.parse("cbc:TotalTax", :Money) { line.total_tax = it }
               end
-
-              r.with_node("cac:Item") do
-                r.parse("cbc:Description", :String) { line.description = it }
-                r.parse("cbc:Name", :String) { line.name = it }
-                r.parse("cac:ClassifiedTaxCategory", :TaxCategory) { line.tax_category = it }
-              end
-
+              r.parse("cac:Item", :Product) { line.product = it }
               r.with_node("cac:Price") do
                 line.price = Model::Price.new.tap do |price|
                   r.parse("cbc:PriceAmount", :Money) { price.net = it }

@@ -24,6 +24,7 @@ require_relative "model/document_reference"
 require_relative "model/tax_breakdown"
 require_relative "model/monetary_total"
 require_relative "model/payment_means"
+require_relative "model/product"
 
 require_relative "model/remittance_advice_line"
 require_relative "model/remittance_advice"
