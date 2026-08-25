@@ -50,7 +50,7 @@ module Tradedoc
                   w.render(buyer, as: "cac:Party")
                 end
               end
-              w.render(obj.monetary_total.tax_breakdown)
+              w.render(obj.monetary_total&.tax_breakdown)
               w.render(obj.monetary_total)
               w.render_list(obj.lines)
             end

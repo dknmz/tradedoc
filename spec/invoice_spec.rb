@@ -1,6 +1,40 @@
 RSpec.describe(Tradedoc::Model::Invoice) do
   subject(:parsed) { Tradedoc.parse(sample_xml) }
 
+  let(:comprehensive_model) do
+    Tradedoc::Model::Invoice.new(
+      invoice_number: "INV-260824-40000",
+      issue_date: Date.new(2026, 8, 24),
+      invoice_type_code: "380",
+      currency_code: "EUR",
+      due_date: Date.new(2026, 9, 30),
+      purchase_order_number: "PO-12345",
+      note: "Please pay promptly",
+      specification_id: "urn:cen.eu:en16931:2017",
+      invoice_period: {
+        start_date: Date.new(2026, 7, 1),
+        end_date: Date.new(2026, 7, 31)
+      },
+      payment_means: [
+        {
+          receiving_account: {
+            scheme_name: "IBAN",
+            account_number: "010000001"
+          }
+        },
+        {
+          receiving_account: {
+            scheme_name: "SWIFT",
+            account_number: "02000002",
+            financial_institution: {
+              id: "DKDKABCD"
+            }
+          }
+        }
+      ]
+    )
+  end
+
   shared_examples_for "format identification" do |expected_format|
     # We'll assume the parent `describe` block is the name/label of the format
     expected_format ||= metadata.dig(:parent_example_group, :description)
@@ -80,6 +114,22 @@ RSpec.describe(Tradedoc::Model::Invoice) do
     end
   end
 
+  shared_examples_for "serializing essential attributes" do
+    # We'll assume the parent `describe` block is the name/label of the format
+    format_name ||= metadata.dig(:parent_example_group, :description)
+    fmt = Tradedoc.format_from(format_name)
+
+    it "can serialize an empty model" do
+      empty_model = Tradedoc::Model::Invoice.new
+
+      expect(empty_model.dump(fmt)).to(be_a(Nokogiri::XML::Document))
+    end
+
+    it "can serialize a comprehensive model" do
+      expect(comprehensive_model.dump(fmt)).to(be_a(Nokogiri::XML::Document))
+    end
+  end
+
   describe "APEH" do
     let(:sample_xml) { File.read("spec/format/apeh/samples/invoice.xml") }
 
@@ -90,8 +140,8 @@ RSpec.describe(Tradedoc::Model::Invoice) do
     let(:sample_xml) { File.read("spec/format/cii/samples/CII_example1.xml") }
 
     it_behaves_like "format identification"
-
     it_behaves_like "parsing essential attributes"
+    it_behaves_like "serializing essential attributes"
 
     it "can parse a sample file and dump it back to valid CII" do
       parsed = Tradedoc.parse(sample_xml)
@@ -144,8 +194,8 @@ RSpec.describe(Tradedoc::Model::Invoice) do
     let(:sample_xml) { File.read("spec/format/ubl/samples/UBL-Invoice-2.1-Example.xml") }
 
     it_behaves_like "format identification"
-
     it_behaves_like "parsing essential attributes"
+    it_behaves_like "serializing essential attributes"
 
     it "can parse a sample file and dump it back to valid UBL" do
       parsed = Tradedoc.parse(sample_xml)

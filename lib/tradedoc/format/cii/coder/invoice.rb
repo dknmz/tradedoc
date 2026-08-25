@@ -59,7 +59,7 @@ module Tradedoc
                   w.render(obj.purchase_order_number, as: "ram:PaymentReference")
                   w.render(obj.currency_code, as: "ram:InvoiceCurrencyCode")
 
-                  w.render_list(obj.monetary_total.tax_breakdown.subtotals)
+                  w.render_list(obj.monetary_total&.tax_breakdown&.subtotals)
 
                   w.add("ram:SpecifiedTradePaymentTerms") do
                     w.render(obj.due_date, as: "ram:DueDateDateTime")
