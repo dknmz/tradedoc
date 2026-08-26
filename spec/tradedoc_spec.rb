@@ -15,6 +15,22 @@ RSpec.describe Tradedoc do
         expect(result).to(eq([Tradedoc::Format::UBL, Tradedoc::Format::UBL::Coder::RemittanceAdvice]))
       end
     end
+
+    context "with a minimal, irrelevant XML document" do
+      let(:source) { "<root/>" }
+
+      it "doesn't detect anything" do
+        expect(result).to(be_nil)
+      end
+    end
+  end
+
+  describe ".file_extensions" do
+    subject(:result) { Tradedoc.file_extensions }
+
+    it "returns the expected set" do
+      expect(result).to(eq(Set[".isdoc", ".xml", ".xsig"]))
+    end
   end
 
   describe ".parse" do

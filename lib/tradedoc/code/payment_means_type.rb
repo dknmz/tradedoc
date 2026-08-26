@@ -4,12 +4,12 @@ module Tradedoc
       class << self
         def get(input)
           case input
-          in String => code if code.match?(/^\d+$/)
+          in String => code
             @values.values.detect { it.code == code }
           in Symbol => id
             @values[id]
           in other
-            raise "can't lookup by '#{other}'"
+            raise "can't lookup by '#{other.class}'"
           end
         end
 
@@ -79,13 +79,25 @@ module Tradedoc
       register "1", :instrument_not_defined
       register "2", :ach_credit, label: "ACH credit"
       register "3", :ach_debit, label: "ACH debit"
+      register "8", :hold
+      register "9", :national_clearing
       register "10", :cash
       register "20", :cheque
       register "30", :credit_transfer
       register "31", :debit_transfer
+      register "42", :payment_to_bank_account
+      register "48", :bank_card
       register "54", :credit_card
+      register "57", :standing_agreement
       register "58", :sepa_credit_transfer, label: "SEPA credit transfer"
       register "59", :sepa_direct_debit, label: "SEPA direct debit"
+      register "68", :online_payment_service
+
+      # From the docs:
+      #   A code assigned within a code list to be used on an
+      #   interim basis and as defined among trading partners
+      #   until a precise code can be assigned to the code list.
+      register "ZZZ", :mutually_defined
     end
   end
 end
