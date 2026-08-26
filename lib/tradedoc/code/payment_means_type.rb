@@ -79,13 +79,17 @@ module Tradedoc
       register "1", :instrument_not_defined
       register "2", :ach_credit, label: "ACH credit"
       register "3", :ach_debit, label: "ACH debit"
+      register "8", :hold
+      register "9", :national_clearing
       register "10", :cash
       register "20", :cheque
       register "30", :credit_transfer
       register "31", :debit_transfer
       register "54", :credit_card
+      register "57", :standing_agreement
       register "58", :sepa_credit_transfer, label: "SEPA credit transfer"
       register "59", :sepa_direct_debit, label: "SEPA direct debit"
+      register "68", :online_payment_service
     end
   end
 end
