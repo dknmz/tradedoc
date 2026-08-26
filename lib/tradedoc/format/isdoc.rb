@@ -23,7 +23,7 @@ module Tradedoc
           end
 
           def self.can_parse?(xmldoc)
-            xmldoc.root.namespace.href == namespaces.fetch("xmlns")
+            xmldoc.root.namespace&.href == namespaces.fetch("xmlns")
           end
 
           def self.dump(w, obj)

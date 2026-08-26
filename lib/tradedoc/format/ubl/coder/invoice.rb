@@ -18,7 +18,7 @@ module Tradedoc
 
           # @param xmldoc [Nokogiri::XML::Document]
           def self.can_parse?(xmldoc)
-            xmldoc.root.namespace.href == namespaces.fetch("xmlns:inv")
+            xmldoc.root.namespace&.href == namespaces.fetch("xmlns:inv")
           end
 
           def self.ruby_type

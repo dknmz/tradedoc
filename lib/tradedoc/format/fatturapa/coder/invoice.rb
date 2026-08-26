@@ -14,7 +14,7 @@ module Tradedoc
 
           # @param xmldoc [Nokogiri::XML::Document]
           def self.can_parse?(xmldoc)
-            xmldoc.root.namespace.href == namespaces.fetch("xmlns:p")
+            xmldoc.root.namespace&.href == namespaces.fetch("xmlns:p")
           end
 
           def self.dump(w, obj)

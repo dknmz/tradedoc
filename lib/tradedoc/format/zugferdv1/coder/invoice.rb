@@ -16,7 +16,7 @@ module Tradedoc
 
           # @param xmldoc [Nokogiri::XML::Document]
           def self.can_parse?(xmldoc)
-            xmldoc.root.namespace.href == namespaces.fetch("xmlns:rsm")
+            xmldoc.root.namespace&.href == namespaces.fetch("xmlns:rsm")
           end
 
           def self.dump(w, obj)

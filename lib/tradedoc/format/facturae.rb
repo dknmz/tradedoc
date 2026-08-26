@@ -33,7 +33,7 @@ module Tradedoc
           end
 
           def self.can_parse?(xmldoc)
-            root_ns = xmldoc.root.namespace.href
+            root_ns = xmldoc.root.namespace&.href
             namespaces.fetch("xmlns") == root_ns || OTHER_NS.include?(root_ns)
           end
 
