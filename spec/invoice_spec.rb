@@ -149,6 +149,33 @@ RSpec.describe(Tradedoc::Model::Invoice) do
 
       validate_schema(parsed.dump(:cii), "spec/format/cii/xsd/data/standard/CrossIndustryInvoice_100pD16B.xsd")
     end
+
+    context "when the XML contains extraneous spaces" do
+      let(:sample_xml) { <<~XML }
+        <?xml version="1.0" encoding="UTF-8"?>
+        <rsm:CrossIndustryInvoice
+          xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100"
+          xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
+          xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
+          xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <rsm:ExchangedDocument>
+            <ram:ID>INV-2026-08-1928</ram:ID>
+            <ram:TypeCode>380</ram:TypeCode>
+            <ram:IssueDateTime>
+              <udt:DateTimeString format="102">
+                20260126
+              </udt:DateTimeString>
+            </ram:IssueDateTime>
+          </rsm:ExchangeDocument>
+        </rsm:CrossIndustryInvoice>
+      XML
+
+      it "can parse the document" do
+        parsed = Tradedoc.parse(sample_xml)
+        expect(parsed.issue_date).to(eq(Date.new(2026, 1, 26)))
+      end
+    end
   end
 
   describe "FacturaE" do

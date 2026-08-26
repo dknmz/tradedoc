@@ -12,17 +12,7 @@ module Tradedoc
           end
 
           def self.parse(r, strip: true, nilify: true)
-            v = r.text
-
-            if strip
-              v = v.strip
-            end
-
-            if nilify && v.empty?
-              return nil
-            end
-
-            v
+            r.text(strip:, nilify:)
           end
         end
       end

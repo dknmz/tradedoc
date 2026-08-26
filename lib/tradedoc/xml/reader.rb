@@ -125,8 +125,20 @@ module Tradedoc
         values
       end
 
-      def text
-        node.text
+      def text(strip: true, nilify: true)
+        v = node.text
+
+        return if v.nil?
+
+        if strip
+          v = v.strip
+        end
+
+        if nilify && v.empty?
+          v = nil
+        end
+
+        v
       end
 
       def at_xpath(path)
