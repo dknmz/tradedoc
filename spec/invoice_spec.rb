@@ -150,7 +150,7 @@ RSpec.describe(Tradedoc::Model::Invoice) do
       validate_schema(parsed.dump(:cii), "spec/format/cii/xsd/data/standard/CrossIndustryInvoice_100pD16B.xsd")
     end
 
-    context "when the XML contains extraneous spaces" do
+    context "when the XML contains extraneous whitespace" do
       let(:sample_xml) { <<~XML }
         <?xml version="1.0" encoding="UTF-8"?>
         <rsm:CrossIndustryInvoice
