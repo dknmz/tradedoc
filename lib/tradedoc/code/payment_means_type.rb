@@ -87,7 +87,11 @@ module Tradedoc
       register "31", :debit_transfer
       register "42", :payment_to_bank_account
       register "48", :bank_card
+      register "50", :postgiro
+      register "52", :urgent_commercial_payment
       register "54", :credit_card
+      register "55", :debit_card
+      register "56", :bankgiro
       register "57", :standing_agreement
       register "58", :sepa_credit_transfer, label: "SEPA credit transfer"
       register "59", :sepa_direct_debit, label: "SEPA direct debit"
