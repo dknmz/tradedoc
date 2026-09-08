@@ -92,22 +92,53 @@ module Tradedoc
       # @param xpath [String]
       # @param coder_ref [Class | Symbol]
       #   Any class that responds to `.parse(r)` where r is this `Reader`
+      # @param opts [Hash] Options to pass to the underlying parser
       # @return [Object | nil]
-      def parse(xpath, coder_ref)
+      def parse(xpath, coder_ref, **opts)
         coder_class = self.format.coder_for(coder_ref)
-        value = with_node(xpath) { coder_class.parse(self) }
+        node_exists = false
+        value = with_node(xpath) do
+          node_exists = true
+          coder_class.parse(self, **opts)
+        end
 
         # Allows parse callers to do something with the parsed value e.g.
         # parse("//node", Address) { some_obj.address = it }
-        if block_given?
+        if block_given? && node_exists
           yield value
         else
           value
         end
       end
 
-      def text
-        node.text
+      def parse_list(xpath, coder_ref, **opts)
+        coder_class = self.format.coder_for(coder_ref)
+
+        values = with_nodes(xpath) do
+          coder_class.parse(self, **opts)
+        end
+
+        if block_given?
+          yield values
+        end
+
+        values
+      end
+
+      def text(strip: true, nilify: true)
+        v = node.text
+
+        return if v.nil?
+
+        if strip
+          v = v.strip
+        end
+
+        if nilify && v.empty?
+          v = nil
+        end
+
+        v
       end
 
       def at_xpath(path)

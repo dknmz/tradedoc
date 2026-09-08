@@ -22,7 +22,25 @@ module Tradedoc
   #
   # @return [Set<Module>]
   def self.formats
-    Set[Format::CII, Format::UBL]
+    Set[
+      Format::APEH,
+      Format::CII,
+      Format::FacturaE,
+      Format::FatturaPA,
+      Format::ISDOC,
+      Format::KSEF,
+      Format::MyData,
+      Format::NAV,
+      Format::UBL,
+      Format::ZugferdV1
+    ]
+  end
+
+  # List of all possible file extensions that may be parsable by a format in this library
+  #
+  # @return [Set<String>]
+  def self.file_extensions
+    formats.reduce(Set[]) { |memo, fmt| memo + fmt.file_extensions }
   end
 
   # Detect the format and document type of a given source
@@ -35,6 +53,8 @@ module Tradedoc
         return [fmt, dt]
       end
     end
+
+    nil
   end
 
   # Given an XML document or XML string, detect the format, document type, and
@@ -43,7 +63,7 @@ module Tradedoc
   # Returns `nil` when the format or document type isn't supported.
   #
   # @param source [Nokogiri::XML::Document | String]
-  # @return [Object]
+  # @return [Object | nil]
   def self.parse(source)
     xml = xml_from(source)
     if detect(xml) in [fmt, coder]

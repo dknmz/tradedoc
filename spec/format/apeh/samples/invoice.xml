@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<szamla xmlns="http://www.apeh.hu/2005/szamla" xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance">
+  <fejlec>
+    <elado>
+      <nev>Acme Vendor</nev>
+      <adoszam>26649999-8-19</adoszam>
+      <csasz></csasz>
+      <cim>
+        <orszag>HUN</orszag>
+        <telepules>Budapest</telepules>
+        <irszam>1095</irszam>
+        <kozternev>Lechner Ödön fasor 91.</kozternev>
+        <kozterjell></kozterjell>
+        <hazszam></hazszam>
+        <epulet></epulet>
+        <emelet></emelet>
+        <ajto></ajto>
+      </cim>
+    </elado>
+    <vevo>
+      <nev>Buyer Inc.</nev>
+      <adoszam>591-999-00-11</adoszam>
+      <csasz></csasz>
+      <cim>
+        <orszag>PL</orszag>
+        <telepules>Warszawa</telepules>
+        <irszam>00-801</irszam>
+        <kozternev>ul. Chmielna 91</kozternev>
+        <kozterjell></kozterjell>
+        <hazszam></hazszam>
+      </cim>
+    </vevo>
+    <szamlainfo>
+      <sorszam>166778899Z</sorszam>
+      <kialldatum>2026-03-26</kialldatum>
+      <teljdatum>2026-03-26</teljdatum>
+      <fizhatarido>2026-03-26</fizhatarido>
+      <fizmod></fizmod>
+      <szamlatipusa>normal</szamlatipusa>
+      <hivatkozottszamla></hivatkozottszamla>
+      <egyebadat></egyebadat>
+      <penznem>EUR</penznem>
+      <RevisionNumber>6824962941</RevisionNumber>
+      <RecordLocator>284FH9</RecordLocator>
+      <CustomerEmail>user@example.test</CustomerEmail>
+    </szamlainfo>
+  </fejlec>
+  <tetelek>
+    <tetel id="1">
+      <termeknev>Bilet lotniczy / Repülőjegy (HAM-WAW)</termeknev>
+      <besorszam></besorszam>
+      <nettoar>133.30</nettoar>
+      <afakulcs>0.00 %</afakulcs>
+      <afaertek>0.00</afaertek>
+      <bruttoar>133.30</bruttoar>
+    </tetel>
+  </tetelek>
+  <osszesites>
+    <afarovat id="1">
+      <afakulcs>0.00 %</afakulcs>
+      <nettoar>133.30</nettoar>
+      <afaertek>0.00</afaertek>
+      <bruttoar>133.30</bruttoar>
+    </afarovat>
+    <vegosszeg>
+      <nettoarossz>133.30</nettoarossz>
+      <afaertekossz>0.00</afaertekossz>
+      <bruttoarossz>133.30</bruttoarossz>
+    </vegosszeg>
+  </osszesites>
+</szamla>
+
+<!-- English translation
+
+<invoice xmlns="http://www.apeh.hu/2005/szamla" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <header>
+    <seller>
+      <name>Acme Vendor</name>
+      <taxNumber>26649999-8-19</taxNumber>
+      <groupTaxNumber>
+      </groupTaxNumber>
+      <address>
+        <country>HUN</country>
+        <city>Budapest</city>
+        <postalCode>1095</postalCode>
+        <streetName>Lechner Ödön fasor 91.</streetName>
+        <streetType></streetType>
+        <houseNumber></houseNumber>
+        <building></building>
+        <floor></floor>
+        <door></door>
+      </address>
+    </seller>
+    <buyer>
+      <name>Buyer Inc.</name>
+      <taxNumber>591-999-00-11</taxNumber>
+      <groupTaxNumber>
+      </groupTaxNumber>
+      <address>
+        <country>PL</country>
+        <city>Warszawa</city>
+        <postalCode>00-801</postalCode>
+        <streetName>ul. Chmielna 91</streetName>
+        <streetType></streetType>
+        <houseNumber></houseNumber>
+      </address>
+    </buyer>
+    <invoiceInfo>
+      <invoiceNumber>184388466Z</invoiceNumber>
+      <issueDate>2026-03-26</issueDate>
+      <completionDate>2026-03-26</completionDate>
+      <paymentDueDate>2026-03-26</paymentDueDate>
+      <paymentMethod>
+      </paymentMethod>
+      <invoiceType>normal</invoiceType>
+      <referencedInvoice>
+      </referencedInvoice>
+      <otherData>
+      </otherData>
+      <currency>GBP</currency>
+      <RevisionNumber>6824962941</RevisionNumber>
+      <RecordLocator>284FH9</RecordLocator>
+      <CustomerEmail>user@example.test</CustomerEmail>
+    </invoiceInfo>
+  </header>
+  <lineItems>
+    <item id="1">
+      <productName>Flight ticket (LTN-WAW)</productName>
+      <categoryCode></categoryCode>
+      <netPrice>133.30</netPrice>
+      <vatRate>0.00 %</vatRate>
+      <vatAmount>0.00</vatAmount>
+      <grossPrice>133.30</grossPrice>
+    </item>
+  </lineItems>
+  <summary>
+    <vatBreakdown id="1">
+      <vatRate>0.00 %</vatRate>
+      <netPrice>133.30</netPrice>
+      <vatAmount>0.00</vatAmount>
+      <grossPrice>133.30</grossPrice>
+    </vatBreakdown>
+    <total>
+      <netTotal>133.30</netTotal>
+      <vatTotal>0.00</vatTotal>
+      <grossTotal>133.30</grossTotal>
+    </total>
+  </summary>
+</invoice>
+
+-->

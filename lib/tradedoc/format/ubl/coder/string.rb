@@ -7,22 +7,12 @@ module Tradedoc
             ::String
           end
 
-          def self.dump(w, obj, as:)
-            w.add(as, obj)
+          def self.dump(w, obj, as:, **opts)
+            w.add(as, obj, **opts)
           end
 
           def self.parse(r, strip: true, nilify: true)
-            v = r.text
-
-            if strip
-              v = v.strip
-            end
-
-            if nilify && v.empty?
-              return nil
-            end
-
-            v
+            r.text(strip:, nilify:)
           end
         end
       end
