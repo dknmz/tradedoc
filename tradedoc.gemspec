@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.homepage = "https://github.com/dknmz/tradedoc.git"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.4.0"
-  spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/dknmz"
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/dknmz/mastercard_api"
