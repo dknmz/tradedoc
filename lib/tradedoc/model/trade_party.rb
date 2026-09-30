@@ -8,6 +8,8 @@ module Tradedoc
 
       # [BT-63]
       has :vat_id, String
+
+      has :legal_registration_id, String
     end
   end
 end

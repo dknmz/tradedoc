@@ -17,11 +17,13 @@ RSpec.describe(Tradedoc::Model::Invoice) do
       },
       buyer: {
         name: "Purchasing Corp.",
-        vat_id: "DK00001"
+        vat_id: "DK00001",
+        legal_registration_id: "00001"
       },
       supplier: {
         name: "Acme GmbH",
-        vat_id: "DE00002"
+        vat_id: "DE00002",
+        legal_registration_id: "X/00002"
       },
       payment_means: [
         {
@@ -123,6 +125,10 @@ RSpec.describe(Tradedoc::Model::Invoice) do
 
     it "includes seller VAT ID" do
       expect(parsed.supplier.vat_id).to(be_a(String))
+    end
+
+    it "includes seller company ID" do
+      expect(parsed.supplier.legal_registration_id).to(be_a(String))
     end
   end
 

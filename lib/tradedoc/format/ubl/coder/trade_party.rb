@@ -24,6 +24,11 @@ module Tradedoc
                   end
                 end
               end
+              w.render(obj.legal_registration_id) do |id|
+                w.add("cac:PartyLegalEntity") do
+                  w.add("cbc:CompanyID", id)
+                end
+              end
               w.render(obj.contact, as: "cac:Contact")
             end
           end
@@ -39,6 +44,9 @@ module Tradedoc
               r.parse("cac:Contact", :Contact) { obj.contact = it }
               r.parse("cac:PartyTaxScheme[cac:TaxScheme/cbc:ID='#{VAT_SCHEME}']/cbc:CompanyID", :String) do
                 obj.vat_id = it
+              end
+              r.with_node("cac:PartyLegalEntity") do
+                r.parse("cbc:CompanyID", :String) { obj.legal_registration_id = it }
               end
             end
 

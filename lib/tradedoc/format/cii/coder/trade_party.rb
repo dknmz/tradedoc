@@ -13,6 +13,11 @@ module Tradedoc
           def self.dump(w, obj, as:)
             w.add(as) do
               w.render(obj.name, as: "Name")
+              w.render(obj.legal_registration_id) do |id|
+                w.add("ram:SpecifiedLegalOrganization") do
+                  w.add("ram:ID", id)
+                end
+              end
               w.render(obj.contact, as: "ram:DefinedTradeContact")
               w.render(obj.address, as: "PostalTradeAddress")
               w.render(obj.vat_id) do |vat_id|
@@ -26,6 +31,7 @@ module Tradedoc
           def self.parse(r)
             ruby_type.new.tap do |tp|
               r.parse("ram:Name", :String) { tp.name = it }
+              r.parse("ram:SpecifiedLegalOrganization/ram:ID", :String) { tp.legal_registration_id = it }
               r.parse("ram:DefinedTradeContact", :Contact) { tp.contact = it }
               r.parse("ram:PostalTradeAddress", :Address) { tp.address = it }
               r.parse("ram:SpecifiedTaxRegistration/ram:ID[@schemeID='#{VAT_TYPE}']", :String) do
