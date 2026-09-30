@@ -3,6 +3,9 @@ module Tradedoc
     module UBL
       module Coder
         class TradeParty
+          VAT_SCHEME = "VAT"
+          private_constant :VAT_SCHEME
+
           def self.ruby_type
             Model::TradeParty
           end
@@ -13,6 +16,14 @@ module Tradedoc
                 w.add("cbc:Name", obj.name)
               end
               w.render(obj.address, as: "PostalAddress")
+              w.render(obj.vat_id) do |vat_id|
+                w.add("cac:PartyTaxScheme") do
+                  w.add("cbc:CompanyID", vat_id)
+                  w.add("cac:TaxScheme") do
+                    w.add("cbc:ID", VAT_SCHEME, schemeAgencyID: Code::Agency::CEFACT)
+                  end
+                end
+              end
               w.render(obj.contact, as: "cac:Contact")
             end
           end
@@ -26,6 +37,9 @@ module Tradedoc
               end
               r.parse("cac:PostalAddress", :Address) { obj.address = it }
               r.parse("cac:Contact", :Contact) { obj.contact = it }
+              r.parse("cac:PartyTaxScheme[cac:TaxScheme/cbc:ID='#{VAT_SCHEME}']/cbc:CompanyID", :String) do
+                obj.vat_id = it
+              end
             end
 
             obj
