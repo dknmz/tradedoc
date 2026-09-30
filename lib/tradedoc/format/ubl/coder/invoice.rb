@@ -35,17 +35,17 @@ module Tradedoc
               w.render(obj.note, as: "cbc:Note")
               w.render(obj.currency_code, as: "cbc:DocumentCurrencyCode", listAgencyID: Code::Agency::CEFACT)
               w.render(obj.invoice_period, as: "InvoicePeriod")
-              if (po_number = obj.purchase_order_number)
+              w.render(obj.purchase_order_number) do |po_number|
                 w.add("cac:OrderReference") do
                   w.render(po_number, as: "cbc:ID")
                 end
               end
-              if (supplier = obj.supplier)
+              w.render(obj.supplier) do |supplier|
                 w.add("cac:AccountingSupplierParty") do
                   w.render(supplier, as: "cac:Party")
                 end
               end
-              if (buyer = obj.buyer)
+              w.render(obj.buyer) do |buyer|
                 w.add("cac:AccountingCustomerParty") do
                   w.render(buyer, as: "cac:Party")
                 end

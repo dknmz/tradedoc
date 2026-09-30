@@ -20,13 +20,13 @@ module Tradedoc
               end
 
               w.add("ram:SpecifiedLineTradeAgreement") do
-                if (gross = obj.price.gross)
+                w.render(obj.price.gross) do |gross|
                   w.add("ram:GrossPriceProductTradePrice") do
                     w.render(gross, as: "ram:ChargeAmount")
                   end
                 end
 
-                if (net = obj.price.net)
+                w.render(obj.price.net) do |net|
                   w.add("ram:NetPriceProductTradePrice") do
                     w.render(net, as: "ram:ChargeAmount")
                   end

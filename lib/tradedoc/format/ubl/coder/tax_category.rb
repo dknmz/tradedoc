@@ -13,7 +13,7 @@ module Tradedoc
               w.render(obj.rate_percent, as: "cbc:Percent")
               w.render(obj.exemption_reason_code, as: "cbc:TaxExemptionReasonCode")
               w.render(obj.exemption_reason, as: "cbc:TaxExemptionReason")
-              if (tax_scheme = obj.tax_scheme)
+              w.render(obj.tax_scheme) do |tax_scheme|
                 w.add("cac:TaxScheme") do
                   w.render(tax_scheme, as: "cbc:ID")
                 end
