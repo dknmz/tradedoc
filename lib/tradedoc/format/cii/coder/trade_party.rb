@@ -20,9 +20,9 @@ module Tradedoc
               end
               w.render(obj.contact, as: "ram:DefinedTradeContact")
               w.render(obj.address, as: "PostalTradeAddress")
-              w.render(obj.vat_id) do |vat_id|
+              w.render(obj.vat_number) do |vat_number|
                 w.add("ram:SpecifiedTaxRegistration") do
-                  w.add("ram:ID", vat_id, schemeID: VAT_TYPE)
+                  w.add("ram:ID", vat_number, schemeID: VAT_TYPE)
                 end
               end
             end
@@ -35,7 +35,7 @@ module Tradedoc
               r.parse("ram:DefinedTradeContact", :Contact) { tp.contact = it }
               r.parse("ram:PostalTradeAddress", :Address) { tp.address = it }
               r.parse("ram:SpecifiedTaxRegistration/ram:ID[@schemeID='#{VAT_TYPE}']", :String) do
-                tp.vat_id = it
+                tp.vat_number = it
               end
             end
           end

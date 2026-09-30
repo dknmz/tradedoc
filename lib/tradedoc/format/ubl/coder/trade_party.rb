@@ -16,9 +16,9 @@ module Tradedoc
                 w.add("cbc:Name", obj.name)
               end
               w.render(obj.address, as: "PostalAddress")
-              w.render(obj.vat_id) do |vat_id|
+              w.render(obj.vat_number) do |vat_number|
                 w.add("cac:PartyTaxScheme") do
-                  w.add("cbc:CompanyID", vat_id)
+                  w.add("cbc:CompanyID", vat_number)
                   w.add("cac:TaxScheme") do
                     w.add("cbc:ID", VAT_SCHEME, schemeAgencyID: Code::Agency::CEFACT)
                   end
@@ -43,7 +43,7 @@ module Tradedoc
               r.parse("cac:PostalAddress", :Address) { obj.address = it }
               r.parse("cac:Contact", :Contact) { obj.contact = it }
               r.parse("cac:PartyTaxScheme[cac:TaxScheme/cbc:ID='#{VAT_SCHEME}']/cbc:CompanyID", :String) do
-                obj.vat_id = it
+                obj.vat_number = it
               end
               r.with_node("cac:PartyLegalEntity") do
                 r.parse("cbc:CompanyID", :String) { obj.legal_registration_id = it }

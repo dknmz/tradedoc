@@ -7,7 +7,7 @@ module Tradedoc
       has :contact, Contact
 
       # [BT-63]
-      has :vat_id, String
+      has :vat_number, String
 
       has :legal_registration_id, String
     end
