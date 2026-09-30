@@ -12,7 +12,7 @@ module Tradedoc
               w.render(obj.id, as: "cbc:ID")
               w.render(obj.invoiced_quantity, as: "cbc:InvoicedQuantity")
               w.render(obj.total_excluding_tax, as: "LineExtensionAmount")
-              if (total_tax = obj.total_tax)
+              w.render(obj.total_tax) do |total_tax|
                 w.add("cac:TaxTotal") do
                   w.render(total_tax, as: "TotalTax")
                 end
@@ -20,7 +20,7 @@ module Tradedoc
 
               w.render(obj.product)
 
-              if (price = obj.price)
+              w.render(obj.price) do |price|
                 w.add("cac:Price") do
                   w.render(price.net, as: "PriceAmount")
                   w.render(price.base_quantity, as: "cbc:BaseQuantity")

@@ -29,7 +29,7 @@ module Tradedoc
                 w.add("ram:ID", obj.id)
                 w.render(obj.issue_date, as: "ram:IssueDateTime")
 
-                if (note = obj.note)
+                w.render(obj.note) do |note|
                   w.add("ram:IncludedNote") do
                     w.add("ram:Content", note)
                   end

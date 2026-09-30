@@ -26,7 +26,7 @@ module Tradedoc
 
           def self.dump(w, obj)
             w.add("rsm:CrossIndustryInvoice", NS) do
-              if (spec_id = obj.specification_id)
+              w.render(obj.specification_id) do |spec_id|
                 w.add("rsm:ExchangedDocumentContext") do
                   w.add("ram:GuidelineSpecifiedDocumentContextParameter") do
                     w.render(spec_id, as: "ram:ID")
@@ -38,7 +38,7 @@ module Tradedoc
                 w.render(obj.invoice_number, as: "ram:ID")
                 w.render(obj.invoice_type_code, as: "ram:TypeCode")
                 w.render(obj.issue_date, as: "ram:IssueDateTime")
-                if (note = obj.note)
+                w.render(obj.note) do |note|
                   w.add("ram:IncludedNote") do
                     w.add("ram:Content", note)
                   end

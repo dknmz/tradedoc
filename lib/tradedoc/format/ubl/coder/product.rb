@@ -11,7 +11,7 @@ module Tradedoc
             w.add(as) do
               w.render(obj.description, as: "cbc:Description")
               w.render(obj.name, as: "cbc:Name")
-              if (id = obj.seller_assigned_id)
+              w.render(obj.seller_assigned_id) do |id|
                 w.add("cac:SellersItemIdentification") do
                   w.render(id, as: "cbc:ID")
                 end

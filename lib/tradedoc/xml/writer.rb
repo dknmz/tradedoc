@@ -32,11 +32,23 @@ module Tradedoc
       # Given an object, figure out how to dump/render it into the XML builder.
       #
       # If the given object/value is `nil`, nothing is rendered. No empty element.
+      #
+      # A block can be given for custom rendering without a coder class.
+      #
       # Otherwise, a coder is looked-up and used for the given type.
       # Assumes that the de-namespaced class name has a matching local coder.
       #   e.g. `Tradedoc::Model::Country` rendered by `Tradedoc::Format::UBL::Coder::Country`
       def render(obj, coder_ref = nil, **opts)
         return if obj.nil?
+
+        if coder_ref && block_given?
+          raise ArgumentError, "provide a coder or a block, but not both"
+        end
+
+        if block_given?
+          yield obj
+          return
+        end
 
         coder_class = self.format.coder_for(coder_ref || obj.class)
         coder_class.dump(self, obj, **opts)
