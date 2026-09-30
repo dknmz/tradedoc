@@ -15,6 +15,16 @@ RSpec.describe(Tradedoc::Model::Invoice) do
         start_date: Date.new(2026, 7, 1),
         end_date: Date.new(2026, 7, 31)
       },
+      buyer: {
+        name: "Purchasing Corp.",
+        vat_number: "DK00001",
+        legal_registration_id: "00001"
+      },
+      supplier: {
+        name: "Acme GmbH",
+        vat_number: "DE00002",
+        legal_registration_id: "X/00002"
+      },
       payment_means: [
         {
           receiving_account: {
@@ -111,6 +121,14 @@ RSpec.describe(Tradedoc::Model::Invoice) do
       expect(line_items.map(&:price)).to(all(have_attributes(
         net: be_a(Money)
       )))
+    end
+
+    it "includes seller VAT number" do
+      expect(parsed.supplier.vat_number).to(be_a(String))
+    end
+
+    it "includes seller company ID" do
+      expect(parsed.supplier.legal_registration_id).to(be_a(String))
     end
   end
 
