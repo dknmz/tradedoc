@@ -82,13 +82,28 @@ module Tradedoc
         end
       end
 
+      register "CUID", "ChipsUniversalID"
+
+      register "ATBLZ", "AustralianBankleitzahlID"
       register "AUBSB", "AustralianBSBID"
       register "CACPA", "CanadianPaymentsAssociationID"
+      register "CHBCC", "SwissBCID"
+      register "CHSIC", "SICID"
+      register "DEBLZ", "GermanBankleitzahlID"
+      register "ESNCC", "SpanishDomesticInterbankingID"
       register "GBDSC", "UKSortCodeID"
+      register "GRBIC", "HellenicBankID"
       register "HKNCC", "HongKongBankID"
+      register "IENCC", "IrishNSCID"
+      register "INFSC", "IndianFinancialSystemID"
+      register "ITNCC", "ItalianDomesticID"
+      register "JPZGN", "JapanFinancialInstitutionCommonID"
       register "NZRSA", "NewZealandNCCID"
+      register "PLKNR", "PolishNationalClearingID"
+      register "PTNCC", "PortugueseNCCID"
+      register "RUCBC", "RussianCentralBankID"
       register "USABA", "FedwireRoutingNumberID"
-      register "USPID", "CHIPSUniversalID"
+      register "USPID", "CHIPSParticipantID"
       register "ZANCC", "SouthAfricanNCCID"
 
       lock_registry!
