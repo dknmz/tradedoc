@@ -1,6 +1,10 @@
 [Unreleased]
 ------------
 
+### Changed
+
+* Complete list of national clearing systems supported by both CII and UBL
+
 [0.2.0] - 2026-09-30
 --------------------
 
