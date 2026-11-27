@@ -6,6 +6,13 @@ module Tradedoc
     class Reader
       attr_reader :node, :namespaces, :format
 
+      # When selecting a list of nodes, this is the current zero-based index of the node.
+      # This is useful when the position of an item in a list is itself useful data.
+      # Only applies when using `with_nodes` or `parse_list`
+      #
+      # @return [nil | Integer]
+      attr_reader :current_node_index
+
       # @param node [Nokogiri::XML::Node]
       #   XML::Document is also considered a node
       # @param namespaces [Hash]
@@ -20,6 +27,7 @@ module Tradedoc
       #   Must repond to `.coder_for(type)` to get a coder for a destination type.
       def initialize(node, namespaces = {}, format:)
         @node = node
+        @current_node_index = nil
         @namespaces = namespaces
         @format = format
       end
@@ -73,12 +81,14 @@ module Tradedoc
       def with_nodes(xpath, &block)
         previous_node = node
 
-        self.xpath(xpath).map do |current|
+        self.xpath(xpath).each_with_index.map do |current, index|
           @node = current
+          @current_node_index = index
           yield
         end
       ensure
         @node = previous_node
+        @current_node_index = nil
       end
 
       # Given an xpath and a type coder class, if that node exists, parse it into
