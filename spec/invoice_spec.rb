@@ -121,6 +121,8 @@ RSpec.describe(Tradedoc::Model::Invoice) do
       expect(line_items.map(&:price)).to(all(have_attributes(
         net: be_a(Money)
       )))
+
+      expect(line_items.map(&:list_position)).to(eq(Range.new(0, line_items.count - 1).to_a))
     end
 
     it "includes seller VAT number" do

@@ -31,6 +31,7 @@ module Tradedoc
 
           def self.parse(r)
             ruby_type.new.tap do |line|
+              line.list_position = r.current_node_index
               r.parse("cbc:ID", :String) { line.id = it }
               r.parse("cbc:InvoicedQuantity", :BigDecimal) { line.invoiced_quantity = it }
               r.parse("cbc:LineExtensionAmount", :Money) { line.total_excluding_tax = it }

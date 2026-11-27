@@ -50,6 +50,8 @@ module Tradedoc
             line = ruby_type.new
             price = Model::Price.new
 
+            line.list_position = r.current_node_index
+
             r.parse("ram:AssociatedDocumentLineDocument/ram:LineID", :String) { line.id = it }
             r.with_node("ram:SpecifiedLineTradeAgreement") do
               r.with_node("ram:GrossPriceProductTradePrice") do

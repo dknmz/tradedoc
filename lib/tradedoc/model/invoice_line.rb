@@ -1,6 +1,9 @@
 module Tradedoc
   module Model
     class InvoiceLine < Base
+      # Indicates the index or position of this line item in the underlying document.
+      has :list_position, Integer
+
       # [BT-126] Unique ID for the invoice line within the invoice itself
       has :id, String
 
